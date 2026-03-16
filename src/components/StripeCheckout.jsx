@@ -95,8 +95,8 @@ export default function StripeCheckout({ onSuccess, onClose }) {
   useEffect(() => { initPayment() }, [])
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4 py-6">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl max-h-[90vh] overflow-y-auto">
 
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-semibold text-gray-900">Pago seguro</h2>
