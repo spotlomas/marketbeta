@@ -9,7 +9,7 @@ import {
 import { supabase } from '../services/supabaseClient'
 import { useApp } from '../context/AppContext'
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+const stripePromise = loadStripe('pk_test_51TB2WTF9eAehPvmBGJOZcJY40DQ80stmDJYWjB2b6fZgZOHU0h1JPHxODnnbjlaX6CEX4SNJ9p9IPOuVIfGOUeo100eqTttFIX')
 
 // ── Formulario de pago interno ────────────────────────────
 function CheckoutForm({ onSuccess, onError }) {
