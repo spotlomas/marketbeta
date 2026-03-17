@@ -4,12 +4,12 @@ import { supabase } from '../services/supabaseClient'
 const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
-  const [session, setSession]   = useState(undefined) // undefined = cargando
+  const [session, setSession]   = useState(undefined)
   const [usuario, setUsuario]   = useState(null)
-  const [cart, setCart]         = useState([])         // { product, quantity }[]
+  const [cart, setCart]         = useState([])
   const [loading, setLoading]   = useState(true)
 
-  // ── Auth listener ────────────────────────────────────────
+  // ── Auth listener ─────────────────────────────────────
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
@@ -26,48 +26,91 @@ export function AppProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  // ── Fetch perfil de usuario ───────────────────────────────
+  // ── Fetch perfil ──────────────────────────────────────
   async function fetchUsuario(uid) {
     const { data, error } = await supabase
       .from('usuarios')
       .select('*')
       .eq('id', uid)
       .single()
-
     if (!error) setUsuario(data)
+    await fetchCart(uid)
     setLoading(false)
   }
 
-  // ── Cart helpers ─────────────────────────────────────────
-  function addToCart(product) {
-    setCart(prev => {
-      const exists = prev.find(i => i.product.id === product.id)
-      if (exists) {
-        return prev.map(i =>
-          i.product.id === product.id
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
-        )
-      }
-      return [...prev, { product, quantity: 1 }]
-    })
+  // ── Cart persistente ──────────────────────────────────
+  async function fetchCart(uid) {
+    const { data, error } = await supabase
+      .from('cart')
+      .select('*, products(*)')
+      .eq('user_id', uid)
+
+    if (!error && data) {
+      setCart(data.map(item => ({
+        cartItemId: item.id,
+        product: item.products,
+        quantity: item.quantity,
+      })))
+    }
   }
 
-  function removeFromCart(productId) {
+  async function addToCart(product) {
+    if (!session) return
+
+    const existing = cart.find(i => i.product.id === product.id)
+
+    if (existing) {
+      const newQty = existing.quantity + 1
+      await supabase
+        .from('cart')
+        .update({ quantity: newQty })
+        .eq('id', existing.cartItemId)
+
+      setCart(prev => prev.map(i =>
+        i.product.id === product.id ? { ...i, quantity: newQty } : i
+      ))
+    } else {
+      const { data, error } = await supabase
+        .from('cart')
+        .insert({ user_id: session.user.id, product_id: product.id, quantity: 1 })
+        .select('*, products(*)')
+        .single()
+
+      if (!error && data) {
+        setCart(prev => [...prev, {
+          cartItemId: data.id,
+          product: data.products,
+          quantity: data.quantity,
+        }])
+      }
+    }
+  }
+
+  async function removeFromCart(productId) {
+    const item = cart.find(i => i.product.id === productId)
+    if (!item) return
+    await supabase.from('cart').delete().eq('id', item.cartItemId)
     setCart(prev => prev.filter(i => i.product.id !== productId))
   }
 
-  function updateQuantity(productId, quantity) {
+  async function updateQuantity(productId, quantity) {
     if (quantity <= 0) { removeFromCart(productId); return }
-    setCart(prev =>
-      prev.map(i => i.product.id === productId ? { ...i, quantity } : i)
-    )
+    const item = cart.find(i => i.product.id === productId)
+    if (!item) return
+    await supabase.from('cart').update({ quantity }).eq('id', item.cartItemId)
+    setCart(prev => prev.map(i =>
+      i.product.id === productId ? { ...i, quantity } : i
+    ))
   }
 
-  function clearCart() { setCart([]) }
+  async function clearCart() {
+    if (!session) return
+    await supabase.from('cart').delete().eq('user_id', session.user.id)
+    setCart([])
+  }
 
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0)
-  const cartTotal = cart.reduce((sum, i) => sum + i.product.price * i.quantity, 0)
+  const cartTotal = cart.reduce((sum, i) => sum + (i.product?.price || 0) * i.quantity, 0)
 
   return (
     <AppContext.Provider value={{
@@ -75,7 +118,7 @@ export function AppProvider({ children }) {
       loading,
       cart, cartCount, cartTotal,
       addToCart, removeFromCart, updateQuantity, clearCart,
-      fetchUsuario,
+      fetchUsuario, fetchCart,
     }}>
       {children}
     </AppContext.Provider>

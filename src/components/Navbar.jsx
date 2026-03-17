@@ -16,28 +16,26 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
           <Link to="/" className="text-xl font-bold text-brand-600 tracking-tight">
             Market<span className="text-gray-800">Beta</span>
           </Link>
 
-          {/* Nav links */}
-          <div className="flex items-center gap-6">
-            <Link to="/" className="text-sm text-gray-600 hover:text-brand-600 transition-colors">
+          <div className="flex items-center gap-4">
+            <Link to="/" className="text-sm text-gray-600 hover:text-brand-600 transition-colors hidden sm:block">
               Inicio
             </Link>
 
             {usuario?.tipo_usuario === 'vendedor' && (
-              <Link to="/seller" className="text-sm text-gray-600 hover:text-brand-600 transition-colors">
+              <Link to="/seller" className="text-sm text-gray-600 hover:text-brand-600 transition-colors hidden sm:block">
                 Mi Tienda
               </Link>
             )}
 
-            {/* Cart */}
-            <Link
-              to="/cart"
-              className="relative text-sm text-gray-600 hover:text-brand-600 transition-colors"
-            >
+            <Link to="/mis-compras" className="text-sm text-gray-600 hover:text-brand-600 transition-colors hidden sm:block">
+              Mis Compras
+            </Link>
+
+            <Link to="/cart" className="relative text-sm text-gray-600 hover:text-brand-600 transition-colors">
               🛒
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-brand-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
@@ -46,22 +44,18 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* User */}
             <div className="flex items-center gap-3">
               {usuario && (
                 <span className="text-sm text-gray-500 hidden sm:block">
                   Hola, {usuario.nombre?.split(' ')[0]}
                 </span>
               )}
-              <button
-                onClick={handleLogout}
-                className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition-colors"
-              >
+              <button onClick={handleLogout}
+                className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition-colors">
                 Salir
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </nav>
