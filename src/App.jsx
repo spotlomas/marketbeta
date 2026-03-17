@@ -9,6 +9,11 @@ import Cart         from './pages/Cart'
 import Seller       from './pages/Seller'
 import MisCompras   from './pages/MisCompras'
 import PuntoDeVenta from './pages/PuntoDeVenta'
+import Admin        from './pages/Admin'
+import Buscar       from './pages/Buscar'
+import Tienda       from './pages/Tienda'
+import Tiendas      from './pages/Tiendas'
+import Perfil       from './pages/Perfil'
 
 export default function App() {
   return (
@@ -19,11 +24,16 @@ export default function App() {
           <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/"               element={<Home />} />
-            <Route path="/cart"           element={<Cart />} />
-            <Route path="/seller"         element={<Seller />} />
-            <Route path="/mis-compras"    element={<MisCompras />} />
-            <Route path="/punto-de-venta" element={<PuntoDeVenta />} />
+            <Route path="/"                 element={<Home />} />
+            <Route path="/cart"             element={<Cart />} />
+            <Route path="/seller"           element={<Seller />} />
+            <Route path="/mis-compras"      element={<MisCompras />} />
+            <Route path="/punto-de-venta"   element={<PuntoDeVenta />} />
+            <Route path="/admin"            element={<Admin />} />
+            <Route path="/buscar"           element={<Buscar />} />
+            <Route path="/tienda/:id"       element={<Tienda />} />
+            <Route path="/tiendas"          element={<Tiendas />} />
+            <Route path="/perfil"           element={<Perfil />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
