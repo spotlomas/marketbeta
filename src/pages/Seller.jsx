@@ -34,24 +34,24 @@ export default function Seller() {
   const totalIngresos = ventas.reduce((sum, o) => sum + Number(o.amount), 0)
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white pb-24">
+    <div className="min-h-screen bg-white dark:bg-[#050505] text-gray-900 dark:text-white pb-24 transition-colors">
       <TopNav />
       <main className="max-w-4xl mx-auto px-4 py-8">
 
-        <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6">
-          <h1 className="text-xl font-dot tracking-widest text-[#CCFF00] uppercase">VENDOR_DASHBOARD</h1>
+        <div className="flex items-center justify-between mb-8 border-b border-gray-200 dark:border-white/10 pb-6">
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Panel de Vendedor</h1>
           <Link to="/punto-de-venta"
-            className="border border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00] hover:text-black px-4 py-2 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all shadow-[0_0_10px_rgba(204,255,0,0.1)]">
-            POS.TERMINAL
+            className="bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black hover:bg-green-700 dark:hover:bg-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg flex items-center gap-2">
+            📷 Punto de Venta
           </Link>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 bg-[#121212] p-2 rounded-full w-fit mb-8 border border-white/5">
-          {[{ key: 'products', label: 'INVENTORY.SYS' }, { key: 'orders', label: 'SALES.LOG' }].map(t => (
+        {/* Pestañas */}
+        <div className="flex gap-2 bg-gray-100 dark:bg-[#121212] p-2 rounded-full w-fit mb-8 border border-gray-200 dark:border-white/5">
+          {[{ key: 'products', label: 'Mis Productos' }, { key: 'orders', label: 'Mis Ventas' }].map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`px-6 py-2.5 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all
-                ${tab === t.key ? 'bg-white text-black font-bold shadow-md' : 'text-gray-500 hover:text-white'}`}>
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all
+                ${tab === t.key ? 'bg-white dark:bg-white text-black font-bold shadow-md' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
               {t.label}
             </button>
           ))}
@@ -62,30 +62,29 @@ export default function Seller() {
         {tab === 'orders' && (
           <div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <StatCard label="VERIFIED_OPS" value={ventas.length} icon="✓" />
-              <StatCard label="PENDING_SYNC" value={pendientes.length} icon="⧖" />
-              <StatCard label="REVENUE_STREAM" value={`$${totalIngresos.toFixed(2)}`} icon="₹" />
-              <StatCard label="TOTAL_ENTRIES" value={orders.length} icon="Σ" />
+              <StatCard label="Entregados" value={ventas.length} icon="✓" />
+              <StatCard label="Pendientes" value={pendientes.length} icon="⏳" />
+              <StatCard label="Ingresos" value={`$${totalIngresos.toFixed(2)}`} icon="💰" />
+              <StatCard label="Total Pedidos" value={orders.length} icon="📋" />
             </div>
 
             {loadingOrders ? (
               <div className="flex animate-pulse items-center gap-3">
-                <div className="w-2 h-2 bg-brand-500 rounded-full"></div>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-brand-500">Querying transactions...</p>
+                <p className="text-sm text-gray-400">Cargando ventas...</p>
               </div>
             ) : orders.length === 0 ? (
-              <div className="text-center py-20 bg-[#0a0a0a] border border-white/5 rounded-3xl">
-                <p className="text-4xl mb-4 font-mono font-light text-brand-500 opacity-30">NULL</p>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500">No telemetry recorded in sales log.</p>
+              <div className="text-center py-20 bg-gray-50 dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/5 rounded-3xl">
+                <p className="text-4xl mb-4 opacity-30">📋</p>
+                <p className="text-sm text-gray-500">Aún no tienes ventas registradas.</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {orders.map(order => (
-                  <div key={order.id} className="bg-[#0a0a0a] rounded-3xl border border-white/5 p-5 flex items-center justify-between gap-4 transition-all hover:border-white/20">
+                  <div key={order.id} className="bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/5 p-5 flex items-center justify-between gap-4 transition-all hover:border-gray-300 dark:hover:border-white/20">
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-mono uppercase tracking-widest text-white truncate">{order.products?.name}</p>
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-gray-500 mt-1">{order.usuarios?.nombre || order.usuarios?.email}</p>
-                      <p className="text-[#CCFF00] font-mono tracking-widest text-sm mt-3">${Number(order.amount).toFixed(2)}</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{order.products?.name}</p>
+                      <p className="text-xs text-gray-500 mt-1">{order.usuarios?.nombre || order.usuarios?.email}</p>
+                      <p className="text-green-600 dark:text-[#CCFF00] font-bold text-sm mt-2">${Number(order.amount).toFixed(2)}</p>
                     </div>
                     <StatusBadge status={order.status} />
                   </div>
@@ -102,21 +101,20 @@ export default function Seller() {
 
 function StatCard({ label, value, icon }) {
   return (
-    <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 p-5 relative overflow-hidden group hover:border-[#CCFF00]/50 transition-colors">
-      <div className="absolute top-0 right-0 w-24 h-24 bg-[#CCFF00] blur-[60px] opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none rounded-full"></div>
-      <p className="text-xl text-gray-600 font-mono mb-2">{icon}</p>
-      <p className="text-2xl font-dot tracking-widest text-white">{value}</p>
-      <p className="text-[9px] font-mono uppercase tracking-widest text-gray-500 mt-2">{label}</p>
+    <div className="bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/10 p-5 relative overflow-hidden group hover:border-green-400 dark:hover:border-[#CCFF00]/50 transition-colors">
+      <p className="text-xl text-gray-400 dark:text-gray-600 mb-2">{icon}</p>
+      <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+      <p className="text-xs text-gray-500 mt-2">{label}</p>
     </div>
   )
 }
 
 function StatusBadge({ status }) {
   const map = {
-    pendiente_entrega: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-    entregado: 'bg-green-500/10 text-green-500 border-green-500/20',
-    cancelado: 'bg-red-500/10 text-red-500 border-red-500/20',
+    pendiente_entrega: 'bg-orange-50 dark:bg-yellow-500/10 text-orange-500 dark:text-yellow-500 border-orange-200 dark:border-yellow-500/20',
+    entregado: 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-500 border-green-200 dark:border-green-500/20',
+    cancelado: 'bg-red-50 dark:bg-red-500/10 text-red-500 border-red-200 dark:border-red-500/20',
   }
-  const labels = { pendiente_entrega: 'PENDING', entregado: 'VERIFIED', cancelado: 'ABORTED' }
-  return <span className={`text-[9px] font-mono tracking-widest px-3 py-1 rounded-full uppercase border flex-shrink-0 ${map[status] ?? 'bg-white/10 text-gray-500 border-white/20'}`}>{labels[status] ?? status}</span>
+  const labels = { pendiente_entrega: 'Pendiente', entregado: 'Entregado', cancelado: 'Cancelado' }
+  return <span className={`text-xs font-medium px-3 py-1 rounded-full border flex-shrink-0 ${map[status] ?? 'bg-gray-100 dark:bg-white/10 text-gray-500 border-gray-200 dark:border-white/20'}`}>{labels[status] ?? status}</span>
 }

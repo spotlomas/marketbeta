@@ -14,7 +14,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 h-16 transition-colors">
+    <div className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-black border-t border-gray-100 dark:border-white/10 h-16 transition-colors">
       <nav className="max-w-3xl mx-auto h-full px-2 sm:px-6">
         <div className="flex items-center justify-between h-full">
           {tabs.map(tab => {
@@ -31,7 +31,7 @@ export default function BottomNav() {
                     {tab.icon}
                   </span>
                   {tab.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-2.5 bg-food-500 text-white font-bold text-[9px] rounded-full px-1.5 py-0.5 min-w-[16px] text-center leading-none border border-white dark:border-gray-900">
+                    <span className="absolute -top-1.5 -right-2.5 bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black font-bold text-[9px] rounded-full px-1.5 py-0.5 min-w-[16px] text-center leading-none border border-white dark:border-black">
                       {tab.badge > 9 ? '9+' : tab.badge}
                     </span>
                   )}
@@ -40,7 +40,7 @@ export default function BottomNav() {
                   {tab.label}
                 </span>
                 {active && (
-                  <span className="absolute bottom-1 w-1 h-1 bg-food-500 rounded-full" />
+                  <span className="absolute bottom-1 w-1 h-1 bg-green-600 dark:bg-[#CCFF00] rounded-full" />
                 )}
               </Link>
             )
