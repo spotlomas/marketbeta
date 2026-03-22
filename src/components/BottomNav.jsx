@@ -14,7 +14,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white border-t border-gray-100 h-16">
+    <div className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 h-16 transition-colors">
       <nav className="max-w-3xl mx-auto h-full px-2 sm:px-6">
         <div className="flex items-center justify-between h-full">
           {tabs.map(tab => {
@@ -24,14 +24,14 @@ export default function BottomNav() {
                 key={tab.to}
                 to={tab.to}
                 className={`flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors
-                  ${active ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'}`}
+                  ${active ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'}`}
               >
                 <span className="text-xl relative mb-0.5">
-                  <span className={`block transition-transform ${active ? 'scale-110 drop-shadow-md' : 'grayscale opacity-60'}`}>
+                  <span className={`block transition-transform ${active ? 'scale-110 drop-shadow-md' : 'opacity-60'}`}>
                     {tab.icon}
                   </span>
                   {tab.badge > 0 && (
-                    <span className="absolute -top-1.5 -right-2.5 bg-food-500 text-white font-bold text-[9px] rounded-full px-1.5 py-0.5 min-w-[16px] text-center leading-none border border-white">
+                    <span className="absolute -top-1.5 -right-2.5 bg-food-500 text-white font-bold text-[9px] rounded-full px-1.5 py-0.5 min-w-[16px] text-center leading-none border border-white dark:border-gray-900">
                       {tab.badge > 9 ? '9+' : tab.badge}
                     </span>
                   )}

@@ -7,34 +7,31 @@ export default function StoreCard({ store }) {
   return (
     <Link
       to={`/tienda/${store.id}`}
-      className="flex-shrink-0 w-56 bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md transition-all group"
+      className="flex-shrink-0 w-40 bg-[#0a0a0a] rounded-3xl border border-white/5 overflow-hidden flex flex-col group transition-all hover:border-[#CCFF00]/30 hover:shadow-[0_0_20px_rgba(204,255,0,0.05)] pb-3 relative"
     >
-      {/* Store image */}
-      <div className="h-32 bg-gray-50 overflow-hidden relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none"></div>
+      
+      <div className="aspect-square bg-[#121212] overflow-hidden flex-shrink-0 relative border-b border-white/5 z-10 w-full">
         {store.imagen_tienda
-          ? <img src={store.imagen_tienda} alt={store.nombre_tienda} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          ? <img src={store.imagen_tienda} alt={store.nombre_tienda} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100" />
           : <div className="w-full h-full flex items-center justify-center text-4xl opacity-20">🏪</div>
         }
       </div>
 
-      <div className="p-3">
-        <div className="flex justify-between items-start gap-2">
-          <p className="text-sm font-inter font-bold text-gray-900 truncate">
-            {store.nombre_tienda || store.nombre}
-          </p>
-          {avgRating > 0 && (
-            <div className="flex bg-gray-100 px-1.5 py-0.5 rounded-full items-center gap-1 flex-shrink-0 mt-0.5">
-              <span className="text-[10px] text-gray-800 font-inter font-semibold">{avgRating.toFixed(1)}</span>
-              <span className="text-[9px] text-food-500">★</span>
-            </div>
-          )}
-        </div>
+      <div className="p-4 flex flex-col flex-1 items-center text-center z-10 relative">
+        <p className="text-sm font-mono font-bold tracking-widest uppercase text-white truncate w-full mb-1">
+          {store.nombre_tienda || store.nombre}
+        </p>
+        
         {store.descripcion_tienda && (
-          <p className="text-[11px] text-gray-500 truncate mt-0.5 font-inter">{store.descripcion_tienda}</p>
+          <p className="text-[9px] font-mono tracking-widest text-gray-500 mt-1 line-clamp-2 leading-relaxed w-full uppercase">
+            {store.descripcion_tienda}
+          </p>
         )}
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-[10px] text-gray-400 font-inter bg-gray-50 px-2 py-0.5 rounded-full">Envío MX$25</span>
-          <span className="text-[10px] text-gray-400 font-inter bg-gray-50 px-2 py-0.5 rounded-full">25-35 min</span>
+
+        <div className="flex items-center gap-1 bg-[#121212] px-3 py-1 rounded-md border border-white/5 mt-3 justify-center w-auto">
+          <span className="text-[#CCFF00] text-[9px]">★</span>
+          <span className="text-[10px] text-gray-300 font-mono tracking-widest">{avgRating > 0 ? avgRating.toFixed(1) : 'NEW'}</span>
         </div>
       </div>
     </Link>

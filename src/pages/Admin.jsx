@@ -185,7 +185,7 @@ export default function Admin() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {p.image_url
-                          ? <img src={p.image_url} alt={p.name} className="w-8 h-8 object-cover rounded-lg grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all border border-white/10" />
+                          ? <img src={p.image_url} alt={p.name} className="w-8 h-8 object-cover rounded-lg opacity-70 group-hover:opacity-100 transition-all border border-white/10" />
                           : <div className="w-8 h-8 bg-[#121212] rounded-lg flex items-center justify-center text-xs opacity-50 border border-white/5">📦</div>
                         }
                         <span className="text-xs tracking-wider text-white truncate max-w-[150px]">{p.name}</span>

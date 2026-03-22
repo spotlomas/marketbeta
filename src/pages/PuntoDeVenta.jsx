@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Html5QrcodeScanner } from 'html5-qrcode'
 import { supabase } from '../services/supabaseClient'
 import { useApp } from '../context/AppContext'
 import Navbar from '../components/Navbar'
@@ -12,13 +13,40 @@ export default function PuntoDeVenta() {
   const [success, setSuccess]       = useState('')
   const [pendientes, setPendientes] = useState([])
   const [scanning, setScanning]     = useState(false)
-  const videoRef  = useRef(null)
-  const streamRef = useRef(null)
 
   useEffect(() => {
     fetchPendientes()
-    return () => stopCamera()
   }, [])
+
+  useEffect(() => {
+    let scanner = null
+    if (scanning) {
+      scanner = new Html5QrcodeScanner('qr-reader', {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1.0,
+      }, false)
+
+      scanner.render(
+        (decodedText) => {
+          // Success
+          scanner.clear()
+          setScanning(false)
+          setOrderId(decodedText)
+          searchOrder(decodedText)
+        },
+        (err) => {
+          // Ignore frequent errors during scan
+        }
+      )
+    }
+
+    return () => {
+      if (scanner) {
+        scanner.clear().catch(console.error)
+      }
+    }
+  }, [scanning])
 
   async function fetchPendientes() {
     const { data } = await supabase
@@ -31,20 +59,13 @@ export default function PuntoDeVenta() {
     if (data) setPendientes(data)
   }
 
-  async function startCamera() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-      streamRef.current = stream
-      if (videoRef.current) { videoRef.current.srcObject = stream; videoRef.current.play() }
-      setScanning(true)
-      setError('')
-    } catch {
-      setError('No se pudo acceder a la cámara. Usa la búsqueda manual.')
-    }
+  function startScanner() {
+    setScanning(true)
+    setError('')
+    setSuccess('')
   }
-
-  function stopCamera() {
-    if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null }
+  
+  function stopScanner() {
     setScanning(false)
   }
 
@@ -155,27 +176,22 @@ export default function PuntoDeVenta() {
           <div className="mb-6">
             {scanning ? (
               <div className="space-y-4">
-                <div className="relative bg-[#121212] rounded-3xl overflow-hidden aspect-video border border-white/10 shadow-[0_0_30px_rgba(204,255,0,0.05)]">
-                  <video ref={videoRef} className="w-full h-full object-cover grayscale brightness-110 contrast-125" playsInline muted />
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-48 h-48 border border-[#CCFF00] rounded-xl opacity-70 relative">
-                      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#CCFF00]"></div>
-                      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#CCFF00]"></div>
-                      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#CCFF00]"></div>
-                      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#CCFF00]"></div>
-                    </div>
-                  </div>
-                  <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-mono text-[#CCFF00] border border-[#CCFF00]/30 tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-[#CCFF00] rounded-full animate-pulse"></span> REC
-                  </div>
-                </div>
-                <button onClick={stopCamera}
+                <style>{`
+                  #qr-reader { border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 1.5rem !important; overflow: hidden !important; background: #121212; }
+                  #qr-reader img { display: none !important; }
+                  #qr-reader__dashboard_section_csr span { color: white !important; font-family: monospace; }
+                  #qr-reader__dashboard_section_swaplink { color: #CCFF00 !important; font-family: monospace; text-transform: uppercase; }
+                  #qr-reader button { background: #CCFF00; color: black; font-family: monospace; font-weight: bold; border-radius: 999px; border: none; padding: 8px 16px; min-width: 100px; margin: 4px; }
+                  #qr-reader select { background: #121212; color: white; padding: 4px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; margin-bottom: 8px; max-width: 100%; }
+                `}</style>
+                <div id="qr-reader" className="w-full"></div>
+                <button onClick={stopScanner}
                   className="w-full border border-white/20 text-gray-400 hover:text-white hover:border-white hover:bg-white/5 py-3 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all">
                   TERMINATE_SENSOR
                 </button>
               </div>
             ) : (
-              <button onClick={startCamera}
+              <button onClick={startScanner}
                 className="w-full bg-[#121212] border border-white/10 hover:border-[#CCFF00]/50 hover:bg-[#CCFF00]/5 text-white py-6 rounded-3xl text-[11px] font-mono uppercase tracking-widest transition-all flex flex-col items-center justify-center gap-3">
                 <span className="text-3xl opacity-50">📷</span>
                 INITIALIZE_OPTICAL_SENSOR
@@ -184,6 +200,7 @@ export default function PuntoDeVenta() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
+
             <input value={orderId} onChange={e => setOrderId(e.target.value)}
               placeholder="MANUAL_ID_ENTRY..."
               className="flex-1 bg-[#121212] border border-white/10 hover:border-white/30 focus:border-[#CCFF00] rounded-xl px-5 py-3 text-xs font-mono text-white placeholder-gray-700 outline-none transition-all uppercase tracking-widest"
@@ -201,7 +218,7 @@ export default function PuntoDeVenta() {
             <div className="mt-8 border border-[#CCFF00]/30 bg-[#CCFF00]/5 rounded-3xl p-5 mb-2 animate-[fade-in_0.3s_ease-out]">
               <div className="flex items-center gap-4 mb-6">
                 {order.products?.image_url
-                  ? <img src={order.products.image_url} alt={order.products.name} className="w-16 h-16 object-cover rounded-2xl grayscale border border-white/10" />
+                  ? <img src={order.products.image_url} alt={order.products.name} className="w-16 h-16 object-cover rounded-2xl border border-white/10" />
                   : <div className="w-16 h-16 bg-[#121212] border border-white/10 rounded-2xl flex items-center justify-center text-xl opacity-50">🛍️</div>
                 }
                 <div className="flex-1 min-w-0">

@@ -9,6 +9,18 @@ export function AppProvider({ children }) {
   const [cart, setCart]                 = useState([])
   const [loading, setLoading]           = useState(true)
   const [perfilIncompleto, setPerfilIncompleto] = useState(false)
+  const [theme, setTheme]               = useState(() => localStorage.getItem('theme') || 'light')
+
+  useEffect(() => {
+    const root = window.document.documentElement
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme(t => t === 'light' ? 'dark' : 'light')
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -139,6 +151,7 @@ export function AppProvider({ children }) {
       cart, cartCount, cartTotal,
       addToCart, removeFromCart, updateQuantity, clearCart,
       fetchUsuario, fetchCart,
+      theme, toggleTheme,
     }}>
       {children}
     </AppContext.Provider>

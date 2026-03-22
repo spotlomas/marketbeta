@@ -79,13 +79,13 @@ export default function Cart() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-white text-gray-900 font-inter">
+      <div className="min-h-screen bg-[#050505] text-white font-inter transition-colors">
         <TopNav />
         <div className="max-w-lg mx-auto px-4 py-16 pb-28">
           <div className="text-center mb-10">
-            <div className="text-6xl mb-4 animate-bounce">🎉</div>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">¡Pedido Confirmado!</h2>
-            <p className="text-sm text-gray-500 font-medium">Muestra el código QR al vendedor para recibir tu pedido.</p>
+            <div className="text-6xl mb-6 animate-bounce opacity-80">✅</div>
+            <h2 className="text-xl font-mono tracking-widest uppercase text-[#CCFF00] mb-3">TRANSACTION_SUCCESS</h2>
+            <p className="text-[10px] font-mono tracking-widest uppercase text-gray-400">Present the following QR codes to the merchants for local fulfillment.</p>
           </div>
 
           <div className="space-y-6">
@@ -94,12 +94,12 @@ export default function Cart() {
             ))}
           </div>
 
-          <div className="flex flex-col gap-3 mt-10">
-            <Link to="/mis-compras" className="w-full text-center bg-food-500 hover:bg-food-600 text-white px-4 py-4 rounded-full font-bold text-sm transition-colors shadow-sm">
-              VER MIS PEDIDOS
+          <div className="flex flex-col gap-4 mt-12">
+            <Link to="/mis-compras" className="w-full text-center bg-[#CCFF00] hover:bg-[#b3ff00] text-black px-4 py-4 rounded-full font-mono font-bold tracking-widest text-xs uppercase transition-all shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+              ACCESS_ORDER_HISTORY
             </Link>
-            <Link to="/" className="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-4 rounded-full font-bold text-sm transition-colors">
-              SEGUIR COMPRANDO
+            <Link to="/" className="w-full text-center bg-[#121212] hover:bg-[#1a1a1a] text-white border border-white/10 hover:border-white/30 px-4 py-4 rounded-full font-mono font-bold tracking-widest text-xs uppercase transition-all">
+              CONTINUE_BROWSING
             </Link>
           </div>
         </div>
@@ -109,48 +109,56 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-inter">
-      <TopNav />
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-8 border-b border-gray-100 pb-4">Tu Carrito</h1>
+    <div className="min-h-screen bg-[#050505] text-white font-inter transition-colors relative">
+      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#CCFF00]/5 to-transparent pointer-events-none z-0"></div>
+      
+      <div className="relative z-10">
+        <TopNav />
+      </div>
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32 relative z-10">
+        <h1 className="text-sm font-mono tracking-widest uppercase text-white mb-8 border-b border-white/10 pb-4 flex items-center gap-2">
+          <span className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse"></span>
+          ACTIVE_CART_SESSION
+        </h1>
 
         {cart.length === 0 ? (
-          <div className="text-center py-20 bg-gray-50 rounded-3xl border border-gray-100">
-            <p className="text-6xl mb-6 opacity-40">🛒</p>
-            <p className="font-medium text-lg mb-8 text-gray-500">Tu carrito está vacío</p>
-            <Link to="/" className="bg-food-500 text-white hover:bg-food-600 transition-colors shadow-sm rounded-full px-8 py-3.5 font-bold text-sm inline-block">
-              EXPLORAR COMIDA
+          <div className="text-center py-24 bg-[#0A0A0A] rounded-3xl border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <p className="text-5xl mb-6 opacity-20">🛒</p>
+            <p className="font-mono text-[11px] tracking-widest uppercase text-gray-500 mb-8">BASKET_IS_EMPTY</p>
+            <Link to="/" className="bg-[#121212] text-white hover:bg-white/5 border border-white/10 hover:border-[#CCFF00]/50 transition-all rounded-full px-8 py-4 font-mono font-bold tracking-widest text-[10px] inline-block uppercase shadow-sm">
+              INITIATE_BROWSING
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
               {cart.map(({ product, quantity }) => (
-                <div key={product.id} className="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all hover:shadow-sm shadow-sm">
-                  <div className="w-full sm:w-24 h-32 sm:h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 relative">
+                <div key={product.id} className="bg-[#0A0A0A] rounded-3xl border border-white/5 p-4 flex flex-col sm:flex-row items-start sm:items-center gap-5 transition-all hover:border-white/20 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <div className="w-full sm:w-28 h-32 sm:h-28 rounded-2xl overflow-hidden bg-[#121212] flex-shrink-0 relative border border-white/5">
                     {product.image_url
                       ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-3xl opacity-30">🛍️</div>
+                      : <div className="w-full h-full flex items-center justify-center text-3xl opacity-20">📦</div>
                     }
                   </div>
-                  <div className="flex-1 min-w-0 w-full">
-                    <p className="font-bold text-gray-900 text-lg truncate">{product.name}</p>
-                    <p className="text-gray-500 font-medium text-sm mt-0.5">${Number(product.price).toFixed(2)} c/u</p>
+                  <div className="flex-1 min-w-0 w-full py-1">
+                    <p className="font-bold text-white text-lg truncate tracking-tight">{product.name}</p>
+                    <p className="text-[#CCFF00] font-mono text-[11px] font-bold tracking-widest mt-1">${Number(product.price).toFixed(2)} UNIT</p>
                     {product.stock > 0 && !product.stock_ilimitado && (
-                      <p className="text-xs font-semibold text-orange-500 bg-orange-50 w-fit px-2 py-0.5 rounded-full mt-2">Quedan {product.stock}</p>
+                      <p className="text-[9px] font-mono tracking-widest text-orange-400 bg-orange-950/30 border border-orange-900/50 w-fit px-2 py-1 rounded-full mt-3 uppercase">STOCK: {product.stock}</p>
                     )}
                   </div>
-                  <div className="flex items-center justify-between w-full sm:w-auto mt-4 sm:mt-0 gap-4">
-                    <div className="flex items-center gap-3 bg-gray-100 rounded-full p-1 shadow-inner">
+                  <div className="flex items-center justify-between w-full sm:w-auto mt-2 sm:mt-0 gap-4">
+                    <div className="flex items-center gap-3 bg-[#121212] rounded-full p-1 border border-white/5">
                       <button onClick={() => updateQuantity(product.id, quantity - 1)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-700 hover:bg-gray-50 shadow-sm text-lg font-medium transition-colors">−</button>
-                      <span className="font-bold text-sm w-4 text-center">{quantity}</span>
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-[#050505] text-white hover:text-[#CCFF00] border border-white/10 hover:border-[#CCFF00]/50 text-lg font-medium transition-colors">−</button>
+                      <span className="font-mono font-bold text-xs w-5 text-center">{quantity}</span>
                       <button onClick={() => updateQuantity(product.id, quantity + 1)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-700 hover:bg-gray-50 shadow-sm text-lg font-medium transition-colors">+</button>
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-[#050505] text-white hover:text-[#CCFF00] border border-white/10 hover:border-[#CCFF00]/50 text-lg font-medium transition-colors">+</button>
                     </div>
                     <button onClick={() => removeFromCart(product.id)}
-                      className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      className="text-gray-600 hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors flex items-center justify-center border border-transparent hover:border-red-500/30">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
                     </button>
@@ -159,37 +167,40 @@ export default function Cart() {
               ))}
             </div>
 
-            <div className="bg-gray-50 rounded-3xl border border-gray-100 p-6 h-fit md:sticky top-24 shadow-sm">
-              <h2 className="font-bold text-xl text-gray-900 mb-6 border-b border-gray-200 pb-4">Resumen de compra</h2>
-              <div className="space-y-4 text-sm text-gray-600 font-medium">
+            <div className="bg-[#0A0A0A] rounded-3xl border border-white/5 p-6 h-fit md:sticky top-24 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <h2 className="font-mono text-xs text-[#CCFF00] uppercase tracking-widest mb-6 border-b border-white/10 pb-4">TX_SUMMARY</h2>
+              <div className="space-y-4 text-[11px] font-mono tracking-widest text-gray-400 uppercase">
                 {cart.map(({ product, quantity }) => (
                   <div key={product.id} className="flex justify-between items-start gap-4">
-                    <span className="flex-1 leading-snug">{product.name} <span className="text-gray-400">x{quantity}</span></span>
-                    <span className="flex-shrink-0 text-gray-900 font-semibold">${(product.price * quantity).toFixed(2)}</span>
+                    <span className="flex-1 leading-relaxed truncate">{product.name} <span className="opacity-50">x{quantity}</span></span>
+                    <span className="flex-shrink-0 text-white font-bold">${(product.price * quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-gray-200 mt-6 pt-4 text-sm text-gray-500 font-medium flex justify-between">
-                <span>Tarifa de servicio (6%)</span>
+              <div className="border-t border-white/10 mt-6 pt-5 text-[10px] font-mono text-gray-500 uppercase tracking-widest flex justify-between">
+                <span>SYSTEM_FEE (6%)</span>
                 <span>${(cartTotal * COMMISSION).toFixed(2)}</span>
               </div>
-              <div className="border-t border-gray-200 mt-4 pt-4 flex justify-between items-center text-xl font-bold text-gray-900">
-                <span>Total</span>
-                <span>${cartTotal.toFixed(2)}</span>
+              <div className="border-t border-white/10 mt-5 pt-5 flex justify-between items-end">
+                <span className="text-xs font-mono tracking-widest text-gray-400 uppercase mb-1">FINAL_TOTAL</span>
+                <span className="text-2xl font-bold text-white tracking-tight">${cartTotal.toFixed(2)}</span>
               </div>
               <button onClick={() => setShowCheckout(true)}
-                className="w-full mt-8 bg-food-500 hover:bg-food-600 text-white font-bold py-4 rounded-full text-sm transition-colors shadow-sm focus:ring-4 ring-food-500/20">
-                PASAR POR CAJA
+                className="w-full mt-8 bg-[#CCFF00] hover:bg-[#b3ff00] text-black font-mono font-bold py-4 rounded-full text-[11px] tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(204,255,0,0.2)] active:scale-[0.98]">
+                PROCEED_TO_CHECKOUT
               </button>
               <button onClick={clearCart}
-                className="w-full mt-4 text-xs font-bold text-gray-400 hover:text-red-500 transition-colors py-2 uppercase tracking-wide">
-                Vaciar Carrito
+                className="w-full mt-4 text-[9px] font-mono font-bold text-red-500/50 hover:text-red-500 transition-colors py-3 uppercase tracking-widest">
+                FLUSH_BASKET_DATA
               </button>
             </div>
           </div>
         )}
       </main>
-      <BottomNav />
+
+      <div className="relative z-20">
+        <BottomNav />
+      </div>
 
       {showCheckout && (
         <StripeCheckout
@@ -202,32 +213,32 @@ export default function Cart() {
 }
 
 function OrderQRCard({ order }) {
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(order.id)}&color=000000&bgcolor=ffffff&margin=4`
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(order.id)}&color=CCFF00&bgcolor=050505&margin=4`
 
   return (
-    <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm overflow-hidden">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-100 overflow-hidden">
+    <div className="bg-[#0A0A0A] rounded-[2rem] border border-white/10 p-6 shadow-[0_0_20px_rgba(0,0,0,0.5)] overflow-hidden relative group">
+      <div className="flex items-center gap-4 mb-8 relative z-10">
+        <div className="w-14 h-14 bg-[#121212] rounded-2xl flex items-center justify-center border border-white/5 overflow-hidden">
           {order.products?.image_url
             ? <img src={order.products.image_url} alt={order.products.name} className="w-full h-full object-cover" />
-            : <span className="text-3xl opacity-30">🛍️</span>
+            : <span className="text-2xl opacity-20">📦</span>
           }
         </div>
         <div className="flex-1">
-          <p className="font-bold text-gray-900 text-lg leading-tight line-clamp-2">{order.products?.name}</p>
-          <p className="text-gray-500 font-medium text-sm mt-1">Total: <span className="text-food-600 font-bold">${Number(order.amount).toFixed(2)}</span></p>
+          <p className="font-bold text-white text-base leading-tight line-clamp-2">{order.products?.name}</p>
+          <p className="text-[#CCFF00] font-mono tracking-widest text-[10px] uppercase font-bold mt-2">AMT: ${(Number(order.amount)).toFixed(2)}</p>
         </div>
         <div className="flex-shrink-0">
-           <span className="inline-block text-xs font-bold bg-orange-100 text-orange-600 px-3 py-1.5 rounded-full">Pendiente</span>
+           <span className="inline-block text-[9px] font-mono font-bold bg-orange-950/30 text-orange-400 border border-orange-900/50 px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">PENDING</span>
         </div>
       </div>
 
-      <div className="flex flex-col items-center bg-gray-50 rounded-2xl p-6 border border-gray-100">
-        <div className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
-           <img src={qrUrl} alt="QR_CODE" className="w-48 h-48" />
+      <div className="flex flex-col items-center bg-[#121212] rounded-3xl p-8 border border-white/5 relative z-10">
+        <div className="bg-[#050505] p-4 rounded-[2rem] border-2 border-white/5 shadow-[0_0_30px_rgba(204,255,0,0.1)] group-hover:border-[#CCFF00]/20 transition-colors">
+           <img src={qrUrl} alt="QR_CODE" className="w-48 h-48 rounded-xl opacity-90" />
         </div>
-        <p className="font-bold text-gray-900 uppercase tracking-wide text-xs mt-6">ID DEL PEDIDO</p>
-        <p className="text-sm text-gray-500 font-mono mt-1 font-medium">{order.id.slice(0, 12).toUpperCase()}</p>
+        <p className="font-mono text-[#CCFF00] uppercase tracking-widest text-[10px] mt-8 opacity-80">AUTHORIZATION_ID</p>
+        <p className="text-xl text-white font-mono mt-2 font-bold tracking-widest">{order.id.slice(0, 8).toUpperCase()}</p>
       </div>
     </div>
   )

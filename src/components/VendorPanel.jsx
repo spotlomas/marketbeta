@@ -276,7 +276,7 @@ export default function VendorPanel() {
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4 flex-1 min-w-0">
                     {p.image_url
-                      ? <img src={p.image_url} alt={p.name} className="w-14 h-14 object-cover rounded-2xl flex-shrink-0 grayscale opacity-80" />
+                      ? <img src={p.image_url} alt={p.name} className="w-14 h-14 object-cover rounded-2xl flex-shrink-0 opacity-80" />
                       : <div className="w-14 h-14 bg-[#121212] rounded-2xl flex items-center justify-center text-xl flex-shrink-0 border border-white/5 opacity-50">🛍️</div>
                     }
                     <div className="min-w-0">

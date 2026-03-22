@@ -20,20 +20,27 @@ export default function Tiendas() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-inter pb-24">
-      <TopNav />
-      <div className="px-4 py-8 max-w-2xl mx-auto">
-        <h1 className="font-bold text-2xl tracking-tight text-gray-900 mb-6">
-          Directorio de Tiendas
+    <div className="min-h-screen bg-[#050505] text-white font-inter pb-24 transition-colors relative">
+      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#CCFF00]/10 to-transparent pointer-events-none z-0"></div>
+      
+      <div className="relative z-10 block">
+        <TopNav />
+      </div>
+
+      <div className="px-4 py-8 max-w-2xl mx-auto relative z-10">
+        <h1 className="font-mono text-sm tracking-widest uppercase text-white mb-8 flex items-center gap-2 border-b border-white/10 pb-4">
+          <span className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse"></span>
+          LOCAL_SELLERS_DIRECTORY
         </h1>
+
         {loading ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, i) => <div key={i} className="bg-gray-100 border border-gray-200 rounded-3xl animate-pulse h-48" />)}
+            {[...Array(6)].map((_, i) => <div key={i} className="bg-[#121212] border border-white/5 rounded-3xl animate-pulse h-48 shadow-[0_0_15px_rgba(0,0,0,0.5)]" />)}
           </div>
         ) : stores.length === 0 ? (
-          <div className="text-center py-24 text-gray-500 bg-gray-50 border border-gray-100 rounded-3xl">
+          <div className="text-center py-24 bg-[#0a0a0a] border border-white/5 rounded-3xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
             <p className="text-4xl mb-4 opacity-50">🏪</p>
-            <p className="text-sm font-medium">Aún no hay tiendas locales disponibles.</p>
+            <p className="text-[10px] font-mono tracking-widest uppercase text-gray-500">NO_SELLERS_FOUND.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -41,7 +48,10 @@ export default function Tiendas() {
           </div>
         )}
       </div>
-      <BottomNav />
+
+      <div className="relative z-20">
+        <BottomNav />
+      </div>
     </div>
   )
 }
