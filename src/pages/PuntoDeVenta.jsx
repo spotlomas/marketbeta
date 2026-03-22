@@ -137,71 +137,83 @@ export default function PuntoDeVenta() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#050505] text-white pb-24">
       <Navbar />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-3xl mx-auto px-4 py-8">
 
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Punto de Venta</h1>
-          <p className="text-gray-500 text-sm mt-1">Confirma entregas y el comprador recibirá una notificación para calificar</p>
+        <div className="mb-8 border-b border-white/10 pb-6">
+          <h1 className="text-xl font-dot tracking-widest text-[#CCFF00] uppercase">POS_TERMINAL</h1>
+          <p className="text-[10px] font-mono tracking-widest uppercase text-gray-500 mt-2">DELIVERY_CONFIRMATION_SYSTEM</p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
-          <h2 className="font-semibold text-gray-800 mb-4">Confirmar entrega</h2>
+        <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 p-6 md:p-8 mb-8">
+          <h2 className="text-xs font-mono tracking-widest text-white uppercase mb-6 flex items-center gap-3">
+            <span className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse"></span>
+            SCAN_INTERFACE
+          </h2>
 
-          <div className="mb-4">
+          <div className="mb-6">
             {scanning ? (
-              <div className="space-y-3">
-                <div className="relative bg-black rounded-xl overflow-hidden aspect-video">
-                  <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-48 h-48 border-2 border-brand-400 rounded-xl opacity-70" />
+              <div className="space-y-4">
+                <div className="relative bg-[#121212] rounded-3xl overflow-hidden aspect-video border border-white/10 shadow-[0_0_30px_rgba(204,255,0,0.05)]">
+                  <video ref={videoRef} className="w-full h-full object-cover grayscale brightness-110 contrast-125" playsInline muted />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-48 h-48 border border-[#CCFF00] rounded-xl opacity-70 relative">
+                      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#CCFF00]"></div>
+                      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#CCFF00]"></div>
+                      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#CCFF00]"></div>
+                      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#CCFF00]"></div>
+                    </div>
+                  </div>
+                  <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-mono text-[#CCFF00] border border-[#CCFF00]/30 tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-[#CCFF00] rounded-full animate-pulse"></span> REC
                   </div>
                 </div>
                 <button onClick={stopCamera}
-                  className="w-full border border-gray-300 text-gray-600 hover:bg-gray-50 py-2 rounded-lg text-sm transition-colors">
-                  Detener cámara
+                  className="w-full border border-white/20 text-gray-400 hover:text-white hover:border-white hover:bg-white/5 py-3 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all">
+                  TERMINATE_SENSOR
                 </button>
               </div>
             ) : (
               <button onClick={startCamera}
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2">
-                📷 Escanear QR con cámara
+                className="w-full bg-[#121212] border border-white/10 hover:border-[#CCFF00]/50 hover:bg-[#CCFF00]/5 text-white py-6 rounded-3xl text-[11px] font-mono uppercase tracking-widest transition-all flex flex-col items-center justify-center gap-3">
+                <span className="text-3xl opacity-50">📷</span>
+                INITIALIZE_OPTICAL_SENSOR
               </button>
             )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input value={orderId} onChange={e => setOrderId(e.target.value)}
-              placeholder="O pega el ID de la orden aquí..."
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              placeholder="MANUAL_ID_ENTRY..."
+              className="flex-1 bg-[#121212] border border-white/10 hover:border-white/30 focus:border-[#CCFF00] rounded-xl px-5 py-3 text-xs font-mono text-white placeholder-gray-700 outline-none transition-all uppercase tracking-widest"
               onKeyDown={e => e.key === 'Enter' && searchOrder(orderId)} />
             <button onClick={() => searchOrder(orderId)} disabled={loading}
-              className="bg-brand-600 hover:bg-brand-700 disabled:bg-brand-300 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
-              Buscar
+              className="bg-white/10 hover:bg-white hover:text-black border border-white/20 disabled:bg-white/5 disabled:text-gray-600 disabled:border-white/5 text-white px-6 py-3 rounded-xl text-[10px] font-mono uppercase tracking-widest transition-all font-bold">
+              EXEC_QUERY
             </button>
           </div>
 
-          {error   && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-3">{error}</p>}
-          {success && <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2 mt-3">{success}</p>}
+          {error   && <p className="text-[10px] font-mono tracking-widest uppercase text-red-500 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 mt-4">{error}</p>}
+          {success && <p className="text-[10px] font-mono tracking-widest uppercase text-black font-bold bg-[#CCFF00] border border-[#CCFF00]/50 rounded-xl px-4 py-3 mt-4 animate-[fade-in_0.3s_ease-out]">{success}</p>}
 
           {order && (
-            <div className="mt-4 border border-brand-200 bg-brand-50 rounded-xl p-4">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="mt-8 border border-[#CCFF00]/30 bg-[#CCFF00]/5 rounded-3xl p-5 mb-2 animate-[fade-in_0.3s_ease-out]">
+              <div className="flex items-center gap-4 mb-6">
                 {order.products?.image_url
-                  ? <img src={order.products.image_url} alt={order.products.name} className="w-14 h-14 object-cover rounded-lg" />
-                  : <div className="w-14 h-14 bg-white rounded-lg flex items-center justify-center text-2xl">🛍️</div>
+                  ? <img src={order.products.image_url} alt={order.products.name} className="w-16 h-16 object-cover rounded-2xl grayscale border border-white/10" />
+                  : <div className="w-16 h-16 bg-[#121212] border border-white/10 rounded-2xl flex items-center justify-center text-xl opacity-50">🛍️</div>
                 }
-                <div>
-                  <p className="font-semibold text-gray-800">{order.products?.name}</p>
-                  <p className="text-brand-600 font-bold">${Number(order.amount).toFixed(2)}</p>
-                  <p className="text-xs text-gray-500">Comprador: {order.usuarios?.nombre || order.usuarios?.email}</p>
-                  <p className="text-xs text-gray-500">Cantidad: {order.quantity}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-mono text-xs uppercase tracking-widest text-[#CCFF00] truncate">{order.products?.name}</p>
+                  <p className="text-white font-mono tracking-widest text-sm mt-1 mb-2">${Number(order.amount).toFixed(2)}</p>
+                  <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest truncate">TARGET: {order.usuarios?.nombre || order.usuarios?.email}</p>
+                  <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest">Q_AMT: {order.quantity}</p>
                 </div>
               </div>
               <button onClick={() => confirmOrder(order)} disabled={loading}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-medium py-2.5 rounded-xl text-sm transition-colors">
-                {loading ? 'Confirmando...' : '✅ Confirmar entrega'}
+                className="w-full bg-[#CCFF00] hover:bg-brand-400 disabled:bg-white/10 disabled:text-gray-600 text-black font-mono font-bold tracking-widest text-[11px] uppercase py-4 rounded-full transition-all shadow-[0_0_20px_rgba(204,255,0,0.2)] disabled:shadow-none">
+                {loading ? 'PROCESSING_TX...' : 'VERIFY_HANDOFF'}
               </button>
             </div>
           )}
@@ -209,33 +221,33 @@ export default function PuntoDeVenta() {
 
         {/* Pendientes */}
         <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Pendientes de entrega
-            {pendientes.length > 0 && (
-              <span className="ml-2 bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full">{pendientes.length}</span>
-            )}
+          <h2 className="text-sm font-dot tracking-widest text-white uppercase mb-6 flex items-center gap-3">
+            PENDING_DELIVERIES
+            <span className="text-[10px] font-mono bg-white/10 text-gray-400 px-2 py-0.5 rounded-full">{pendientes.length}</span>
           </h2>
 
           {pendientes.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-8">No tienes órdenes pendientes. 🎉</p>
+            <div className="border border-white/5 bg-[#0a0a0a] rounded-3xl p-10 text-center">
+              <p className="text-[10px] font-mono tracking-widest uppercase text-gray-500">NO_PENDING_TASKS</p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {pendientes.map(p => (
-                <div key={p.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                <div key={p.id} className="bg-[#0a0a0a] rounded-3xl border border-white/5 hover:border-[#CCFF00]/30 p-5 flex items-center gap-4 transition-all group">
+                  <div className="w-14 h-14 rounded-2xl overflow-hidden bg-[#121212] border border-white/10 flex-shrink-0">
                     {p.products?.image_url
-                      ? <img src={p.products.image_url} alt={p.products.name} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-xl">🛍️</div>
+                      ? <img src={p.products.image_url} alt={p.products.name} className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all" />
+                      : <div className="w-full h-full flex items-center justify-center text-xl opacity-50">📦</div>
                     }
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{p.products?.name}</p>
-                    <p className="text-xs text-gray-500">{p.usuarios?.nombre || p.usuarios?.email}</p>
-                    <p className="text-brand-600 font-bold text-sm">${Number(p.amount).toFixed(2)}</p>
+                    <p className="text-xs font-mono uppercase tracking-widest text-white truncate">{p.products?.name}</p>
+                    <p className="text-[9px] font-mono text-gray-500 uppercase tracking-widest truncate mt-1">{p.usuarios?.nombre || p.usuarios?.email}</p>
+                    <p className="text-[#CCFF00] font-mono tracking-widest text-sm mt-2">${Number(p.amount).toFixed(2)}</p>
                   </div>
-                  <button onClick={() => { setOrderId(p.id); searchOrder(p.id) }}
-                    className="text-xs bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg transition-colors flex-shrink-0">
-                    Confirmar
+                  <button onClick={() => { setOrderId(p.id); searchOrder(p.id); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    className="text-[9px] font-mono border border-[#CCFF00]/50 hover:bg-[#CCFF00] hover:text-black text-[#CCFF00] px-4 py-2 rounded-full uppercase tracking-widest transition-all flex-shrink-0">
+                    SELECT
                   </button>
                 </div>
               ))}
@@ -243,6 +255,7 @@ export default function PuntoDeVenta() {
           )}
         </div>
       </main>
+      <div className="h-20"></div>
     </div>
   )
 }

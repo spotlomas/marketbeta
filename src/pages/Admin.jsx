@@ -85,33 +85,33 @@ export default function Admin() {
   const filteredProducts = products.filter(p => p.name?.toLowerCase().includes(search.toLowerCase()))
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#050505] text-white pb-24">
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">⚙️ Panel de Administración</h1>
-          <p className="text-gray-500 text-sm mt-1">Control total de la plataforma</p>
+        <div className="mb-8 border-b border-white/10 pb-6">
+          <h1 className="text-xl font-dot tracking-widest text-[#CCFF00] uppercase">ADMIN_OVERRIDE_PANEL</h1>
+          <p className="text-[10px] font-mono tracking-widest uppercase text-gray-500 mt-2">SYSTEM_CONTROL_ACTIVE</p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Usuarios" value={stats.totalUsers ?? '—'} icon="👥" />
-          <StatCard label="Productos" value={stats.totalProducts ?? '—'} icon="📦" />
-          <StatCard label="Órdenes" value={stats.totalOrders ?? '—'} icon="🧾" />
-          <StatCard label="Ingresos plataforma" value={stats.totalRevenue ? `$${(stats.totalRevenue * 0.06).toFixed(2)}` : '—'} icon="💰" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <StatCard label="REGISTERED_NODES" value={stats.totalUsers ?? 'NULL'} icon="USR" />
+          <StatCard label="ASSET_REGISTRY" value={stats.totalProducts ?? 'NULL'} icon="PKG" />
+          <StatCard label="TRANSACTION_LOGS" value={stats.totalOrders ?? 'NULL'} icon="TXN" />
+          <StatCard label="SYSTEM_REVENUE" value={stats.totalRevenue ? `$${(stats.totalRevenue * 0.06).toFixed(2)}` : 'NULL'} icon="REV" />
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit mb-6">
+        <div className="flex gap-2 bg-[#121212] p-2 rounded-full w-fit mb-8 border border-white/5">
           {[
-            { key: 'users',    label: '👥 Usuarios'  },
-            { key: 'products', label: '📦 Productos'  },
-            { key: 'orders',   label: '🧾 Órdenes'    },
+            { key: 'users',    label: 'USR_DB'  },
+            { key: 'products', label: 'PKG_DB'  },
+            { key: 'orders',   label: 'TXN_LOG' },
           ].map(t => (
             <button key={t.key} onClick={() => { setTab(t.key); setSearch('') }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
-                ${tab === t.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+              className={`px-6 py-2.5 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all
+                ${tab === t.key ? 'bg-white text-black font-bold shadow-md' : 'text-gray-500 hover:text-white'}`}>
               {t.label}
             </button>
           ))}
@@ -120,43 +120,43 @@ export default function Admin() {
         {/* Search */}
         {tab !== 'orders' && (
           <input value={search} onChange={e => setSearch(e.target.value)}
-            placeholder={`Buscar ${tab === 'users' ? 'usuario' : 'producto'}...`}
-            className="w-full max-w-md border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 mb-4" />
+            placeholder={`QUERY_DATABASE(${tab.toUpperCase()})...`}
+            className="w-full max-w-md bg-[#121212] border border-white/10 hover:border-white/30 focus:border-[#CCFF00] rounded-xl px-4 py-3 text-[10px] font-mono text-white placeholder-gray-700 outline-none transition-all mb-8 uppercase tracking-widest" />
         )}
 
         {/* Users Tab */}
         {tab === 'users' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Admin</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+          <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm text-left font-mono">
+              <thead className="text-[10px] tracking-widest uppercase text-gray-500 bg-[#121212] border-b border-white/10">
+                <tr>
+                  <th className="px-6 py-4 font-normal">IDENTIFIER</th>
+                  <th className="px-6 py-4 font-normal">CONTACT</th>
+                  <th className="px-6 py-4 font-normal">ACCESS_LEVEL</th>
+                  <th className="px-6 py-4 font-normal">SYS_ADMIN</th>
+                  <th className="px-6 py-4 font-normal">OPS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-white/5">
                 {filteredUsers.map(u => (
-                  <tr key={u.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-800">{u.nombre}</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{u.email}</td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${u.tipo_usuario === 'vendedor' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
+                  <tr key={u.id} className="hover:bg-white/5 transition-colors group">
+                    <td className="px-6 py-4 text-xs tracking-wider text-white truncate max-w-[150px]">{u.nombre}</td>
+                    <td className="px-6 py-4 text-[10px] text-gray-500 tracking-wider truncate max-w-[200px]">{u.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`text-[9px] tracking-widest px-3 py-1 rounded-full uppercase border ${u.tipo_usuario === 'vendedor' ? 'border-brand-500/30 text-brand-500 bg-brand-500/10' : 'border-white/20 text-gray-400 bg-white/5'}`}>
                         {u.tipo_usuario}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">
                       <button onClick={() => toggleAdmin(u.id, u.es_admin)}
-                        className={`text-xs px-2 py-0.5 rounded-full transition-colors ${u.es_admin ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
-                        {u.es_admin ? '✅ Admin' : 'No admin'}
+                        className={`text-[9px] tracking-widest px-3 py-1 rounded-full uppercase border transition-colors ${u.es_admin ? 'border-red-500/50 text-red-500 bg-red-500/10 hover:bg-red-500 hover:text-black' : 'border-white/20 text-gray-500 bg-transparent hover:border-white/50 hover:text-white'}`}>
+                        {u.es_admin ? 'REVOKE_SUDO' : 'GRANT_SUDO'}
                       </button>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">
                       <button onClick={() => deleteUser(u.id)}
-                        className="text-xs text-red-600 hover:bg-red-50 border border-red-200 px-2 py-1 rounded-lg transition-colors">
-                        Eliminar
+                        className="text-[9px] tracking-widest text-red-500 group-hover:text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-black px-3 py-1 rounded-full transition-colors uppercase">
+                        TERMINATE
                       </button>
                     </td>
                   </tr>
@@ -168,43 +168,43 @@ export default function Admin() {
 
         {/* Products Tab */}
         {tab === 'products' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendedor</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+          <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm text-left font-mono">
+              <thead className="text-[10px] tracking-widest uppercase text-gray-500 bg-[#121212] border-b border-white/10">
+                <tr>
+                  <th className="px-6 py-4 font-normal">ASSET</th>
+                  <th className="px-6 py-4 font-normal">PROVIDER</th>
+                  <th className="px-6 py-4 font-normal">EXCHANGE</th>
+                  <th className="px-6 py-4 font-normal">RATING</th>
+                  <th className="px-6 py-4 font-normal">OPS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-white/5">
                 {filteredProducts.map(p => (
-                  <tr key={p.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
+                  <tr key={p.id} className="hover:bg-white/5 transition-colors group">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
                         {p.image_url
-                          ? <img src={p.image_url} alt={p.name} className="w-8 h-8 object-cover rounded" />
-                          : <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center text-sm">🛍️</div>
+                          ? <img src={p.image_url} alt={p.name} className="w-8 h-8 object-cover rounded-lg grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all border border-white/10" />
+                          : <div className="w-8 h-8 bg-[#121212] rounded-lg flex items-center justify-center text-xs opacity-50 border border-white/5">📦</div>
                         }
-                        <span className="font-medium text-gray-800">{p.name}</span>
-                        {p.featured && <span className="text-xs bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded-full">⭐</span>}
+                        <span className="text-xs tracking-wider text-white truncate max-w-[150px]">{p.name}</span>
+                        {p.featured && <span className="text-[8px] bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-1.5 py-0.5 rounded uppercase tracking-widest">PRIORITY</span>}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{p.usuarios?.nombre ?? '—'}</td>
-                    <td className="px-4 py-3 text-brand-600 font-bold">${Number(p.price).toFixed(2)}</td>
-                    <td className="px-4 py-3 text-xs text-gray-500">{p.score?.toFixed(2) ?? '0'}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4 text-[10px] text-gray-500 uppercase tracking-widest">{p.usuarios?.nombre ?? 'NULL'}</td>
+                    <td className="px-6 py-4 text-[#CCFF00] tracking-wider text-xs">${Number(p.price).toFixed(2)}</td>
+                    <td className="px-6 py-4 text-[10px] text-gray-500">{p.score?.toFixed(2) ?? '0.00'}</td>
+                    <td className="px-6 py-4">
                       <div className="flex gap-2">
                         <button onClick={() => toggleFeatured(p.id, p.featured)}
-                          className={`text-xs px-2 py-1 rounded-lg border transition-colors
-                            ${p.featured ? 'text-yellow-600 border-yellow-200 hover:bg-yellow-50' : 'text-gray-500 border-gray-200 hover:bg-gray-50'}`}>
-                          {p.featured ? 'Quitar ⭐' : 'Destacar'}
+                          className={`text-[9px] px-3 py-1 rounded-full border transition-colors uppercase tracking-widest
+                            ${p.featured ? 'text-yellow-500 border-yellow-500/30 bg-yellow-500/10 hover:bg-yellow-500 hover:text-black' : 'text-gray-500 border-white/20 hover:border-white/50 hover:text-white'}`}>
+                          {p.featured ? 'UNMARK' : 'MARK_PRIORITY'}
                         </button>
                         <button onClick={() => deleteProduct(p.id)}
-                          className="text-xs text-red-600 hover:bg-red-50 border border-red-200 px-2 py-1 rounded-lg transition-colors">
-                          Eliminar
+                          className="text-[9px] text-red-500 border border-red-500/30 hover:bg-red-500 hover:text-black px-3 py-1 rounded-full transition-colors uppercase tracking-widest">
+                          DEL
                         </button>
                       </div>
                     </td>
@@ -217,25 +217,25 @@ export default function Admin() {
 
         {/* Orders Tab */}
         {tab === 'orders' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Comprador</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Monto</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+          <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm text-left font-mono">
+              <thead className="text-[10px] tracking-widest uppercase text-gray-500 bg-[#121212] border-b border-white/10">
+                <tr>
+                  <th className="px-6 py-4 font-normal">TARGET_ASSET</th>
+                  <th className="px-6 py-4 font-normal">BUYER_NODE</th>
+                  <th className="px-6 py-4 font-normal">AMOUNT</th>
+                  <th className="px-6 py-4 font-normal">SYS_STATE</th>
+                  <th className="px-6 py-4 font-normal">TIMESTAMP</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-white/5">
                 {orders.map(o => (
-                  <tr key={o.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-800">{o.products?.name ?? '—'}</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{o.usuarios?.nombre ?? o.usuarios?.email ?? '—'}</td>
-                    <td className="px-4 py-3 text-brand-600 font-bold">${Number(o.amount).toFixed(2)}</td>
-                    <td className="px-4 py-3"><StatusBadge status={o.status} /></td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">{new Date(o.created_at).toLocaleDateString('es-MX')}</td>
+                  <tr key={o.id} className="hover:bg-white/5 transition-colors">
+                    <td className="px-6 py-4 text-xs text-white tracking-widest uppercase truncate max-w-[150px]">{o.products?.name ?? 'NULL'}</td>
+                    <td className="px-6 py-4 text-[10px] text-gray-500 tracking-widest uppercase truncate max-w-[150px]">{o.usuarios?.nombre ?? o.usuarios?.email ?? 'NULL'}</td>
+                    <td className="px-6 py-4 text-[#CCFF00] tracking-widest text-xs">${Number(o.amount).toFixed(2)}</td>
+                    <td className="px-6 py-4"><StatusBadge status={o.status} /></td>
+                    <td className="px-6 py-4 text-[10px] text-gray-600 tracking-widest uppercase">{new Date(o.created_at).toLocaleDateString('en-GB')}</td>
                   </tr>
                 ))}
               </tbody>
@@ -249,29 +249,30 @@ export default function Admin() {
 
 function StatCard({ label, value, icon }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
-      <p className="text-2xl mb-1">{icon}</p>
-      <p className="text-xl font-bold text-gray-900">{value}</p>
-      <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+    <div className="bg-[#0a0a0a] rounded-3xl border border-white/10 p-5 relative overflow-hidden group hover:border-[#CCFF00]/50 transition-colors">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-[#CCFF00] blur-[60px] opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none rounded-full"></div>
+      <p className="text-xl text-gray-600 font-mono mb-2">{icon}</p>
+      <p className="text-2xl font-dot tracking-widest text-white">{value}</p>
+      <p className="text-[9px] font-mono uppercase tracking-widest text-gray-500 mt-2">{label}</p>
     </div>
   )
 }
 
 function StatusBadge({ status }) {
   const map = {
-    pendiente_entrega: 'bg-yellow-100 text-yellow-700',
-    entregado:         'bg-green-100 text-green-700',
-    cancelado:         'bg-red-100 text-red-700',
-    pendiente_pago:    'bg-gray-100 text-gray-600',
+    pendiente_entrega: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+    entregado:         'bg-green-500/10 text-green-500 border-green-500/20',
+    cancelado:         'bg-red-500/10 text-red-500 border-red-500/20',
+    pendiente_pago:    'bg-white/5 text-gray-500 border-white/10',
   }
   const labels = {
-    pendiente_entrega: 'Pendiente',
-    entregado:         'Entregado',
-    cancelado:         'Cancelado',
-    pendiente_pago:    'Sin pagar',
+    pendiente_entrega: 'PENDING_DELIVERY',
+    entregado:         'VERIFIED_DELIVERED',
+    cancelado:         'LOG_ABORTED',
+    pendiente_pago:    'AWAITING_FUNDS',
   }
   return (
-    <span className={`text-xs px-2 py-1 rounded-full font-medium ${map[status] ?? 'bg-gray-100 text-gray-600'}`}>
+    <span className={`text-[9px] tracking-widest px-3 py-1 rounded-full border uppercase border flex-shrink-0 ${map[status] ?? 'bg-white/10 text-gray-500 border-white/20'}`}>
       {labels[status] ?? status}
     </span>
   )

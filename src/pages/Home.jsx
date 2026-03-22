@@ -66,50 +66,41 @@ export default function Home() {
   const activeCat = categories.find(c => c.id === activeCategory)
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-[#050505] pb-24 text-white">
       <TopNav />
 
-      {/* Max width container - centered on desktop, full on mobile */}
       <div className="max-w-2xl mx-auto">
+        {/* Decorative Grid Top */}
+        <div className="absolute inset-x-0 top-14 h-64 bg-brand-500/[0.015] bg-[radial-gradient(#CCFF00_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)] -z-10"></div>
 
         {/* Greeting + search */}
-        <div className="bg-white px-4 pt-4 pb-3">
-          <p className="text-xs text-gray-400">Bienvenido 👋</p>
-          <h1 className="text-lg font-bold text-gray-900 leading-tight">
-            {usuario?.nombre?.split(' ')[0] || 'Hola'}
+        <div className="px-4 pt-6 pb-4">
+          <p className="text-[10px] font-mono tracking-widest text-brand-500 uppercase">SYS_GREETING</p>
+          <h1 className="text-3xl font-dot tracking-widest text-white leading-tight mt-1 uppercase">
+            {usuario?.nombre?.split(' ')[0] || 'GUEST_USER'}
           </h1>
-          <Link
-            to="/buscar"
-            className="mt-3 flex items-center gap-2 bg-gray-100 rounded-2xl px-4 py-2.5 text-sm text-gray-400 hover:bg-gray-200 transition-colors"
-          >
-            <span>🔍</span>
-            <span>Buscar productos o tiendas...</span>
+          <Link to="/buscar"
+            className="mt-5 flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-3 text-sm text-gray-400 hover:bg-white/10 hover:border-brand-500/50 hover:text-white transition-all group backdrop-blur-sm">
+            <span className="text-brand-500 group-hover:scale-110 transition-transform">🔍</span>
+            <span className="font-mono tracking-widest text-xs">SEARCH SYSTEM...</span>
           </Link>
         </div>
 
         {/* Categories */}
         {categories.length > 0 && (
-          <div className="bg-white mt-2 py-3 border-b border-gray-100">
-            <div
-              className="flex gap-2 px-4 overflow-x-auto scrollbar-hide"
-            >
-              <button
-                onClick={() => { setActiveCategory(null); fetchProducts(null) }}
-                className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-2xl text-xs font-medium transition-colors min-w-[56px]
-                  ${!activeCategory ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-600'}`}
-              >
-                <span className="text-xl">🍽️</span>
-                <span>Todo</span>
+          <div className="mt-2 py-4">
+            <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide snap-x">
+              <button onClick={() => { setActiveCategory(null); fetchProducts(null) }}
+                className={`snap-start flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all border min-w-fit
+                  ${!activeCategory ? 'bg-brand-500 text-black border-brand-500 shadow-[0_0_15px_rgba(204,255,0,0.3)]' : 'bg-transparent text-gray-500 border-white/10 hover:border-white/30 hover:text-white'}`}>
+                <span className="text-sm">⚡</span>
+                <span>ALL</span>
               </button>
-
               {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => selectCategory(cat.id)}
-                  className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-2xl text-xs font-medium transition-colors min-w-[64px]
-                    ${activeCategory === cat.id ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-600'}`}
-                >
-                  <span className="text-xl">{cat.emoji}</span>
+                <button key={cat.id} onClick={() => selectCategory(cat.id)}
+                  className={`snap-start flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-mono tracking-widest uppercase transition-all border min-w-fit
+                    ${activeCategory === cat.id ? 'bg-brand-500 text-black border-brand-500 shadow-[0_0_15px_rgba(204,255,0,0.3)]' : 'bg-transparent text-gray-500 border-white/10 hover:border-white/30 hover:text-white'}`}>
+                  <span className="text-sm">{cat.emoji}</span>
                   <span className="whitespace-nowrap">{cat.name}</span>
                 </button>
               ))}
@@ -117,30 +108,28 @@ export default function Home() {
           </div>
         )}
 
-        <div className="px-4 space-y-6 mt-4">
+        <div className="px-4 space-y-10 mt-6 relative z-10">
 
           {/* Featured */}
           {featured.length > 0 && !activeCategory && (
             <section>
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="font-bold text-gray-900 text-base">⭐ Destacados</h2>
+              <div className="flex items-end justify-between mb-4 border-b border-white/10 pb-2">
+                <h2 className="font-dot text-lg tracking-widest flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div> FEATURED</h2>
                 {featured.length > 3 && (
-                  <button onClick={() => setShowAllFeatured(true)} className="text-xs text-brand-600 font-medium">
-                    Ver más →
-                  </button>
+                  <button onClick={() => setShowAllFeatured(true)} className="text-[10px] font-mono tracking-widest uppercase text-brand-500 hover:text-white transition-colors">VIEW_ALL [→]</button>
                 )}
               </div>
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+              <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x">
                 {featured.slice(0, 8).map(product => (
-                  <ProductCard key={product.id} product={product} horizontal />
+                  <div key={product.id} className="snap-center">
+                    <ProductCard product={product} horizontal />
+                  </div>
                 ))}
                 {featured.length > 3 && (
-                  <button
-                    onClick={() => setShowAllFeatured(true)}
-                    className="flex-shrink-0 w-32 min-h-[160px] bg-brand-50 border-2 border-dashed border-brand-200 rounded-2xl flex flex-col items-center justify-center gap-2 text-brand-600 hover:bg-brand-100 transition-colors"
-                  >
-                    <span className="text-2xl">→</span>
-                    <span className="text-xs font-medium text-center">Ver todos</span>
+                  <button onClick={() => setShowAllFeatured(true)}
+                    className="flex-shrink-0 snap-center w-36 min-h-[160px] bg-transparent border border-white/20 border-dashed rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-brand-500 hover:bg-brand-500/5 transition-all group">
+                    <span className="text-2xl text-white/30 group-hover:text-brand-500 group-hover:translate-x-1 transition-all">→</span>
+                    <span className="text-[10px] font-mono tracking-widest uppercase text-gray-500 group-hover:text-brand-500 text-center">ACCESS<br/>DIRECTORY</span>
                   </button>
                 )}
               </div>
@@ -150,23 +139,25 @@ export default function Home() {
           {/* Stores */}
           {stores.length > 0 && !activeCategory && (
             <section>
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="font-bold text-gray-900 text-base">🏪 Tiendas</h2>
-                <Link to="/tiendas" className="text-xs text-brand-600 font-medium">Ver todas →</Link>
+              <div className="flex items-end justify-between mb-4 border-b border-white/10 pb-2">
+                <h2 className="font-dot text-lg tracking-widest">STORES.DIR</h2>
+                <Link to="/tiendas" className="text-[10px] font-mono tracking-widest uppercase text-brand-500 hover:text-white transition-colors">LISTING [→]</Link>
               </div>
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-                {stores.map(store => <StoreCard key={store.id} store={store} />)}
+              <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x">
+                {stores.map(store => (
+                  <div key={store.id} className="snap-center">
+                    <StoreCard store={store} />
+                  </div>
+                ))}
               </div>
             </section>
           )}
 
           {/* All products */}
-          <section>
-            <h2 className="font-bold text-gray-900 text-base mb-3">
-              {activeCat ? `${activeCat.emoji} ${activeCat.name}` : '🔥 Todos los productos'}
-              {!loading && (
-                <span className="ml-2 text-sm font-normal text-gray-400">({products.length})</span>
-              )}
+          <section className="pb-8">
+            <h2 className="font-dot text-lg tracking-widest mb-6 border-b border-white/10 pb-2">
+              <span className="text-brand-500">{(activeCat ? `${activeCat.emoji}_${activeCat.name}` : 'GLOBAL_INDEX').toUpperCase()}</span>
+              {!loading && <span className="ml-3 text-[10px] font-mono text-gray-500">[{products.length} ENTRIES]</span>}
             </h2>
             <ProductList products={products} loading={loading} />
           </section>
@@ -178,17 +169,15 @@ export default function Home() {
 
       {/* All Featured Modal */}
       {showAllFeatured && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center px-0 sm:px-4">
-          <div className="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[85vh] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
-              <h2 className="font-bold text-gray-900">⭐ Todos los destacados</h2>
-              <button onClick={() => setShowAllFeatured(false)} className="text-gray-400 hover:text-gray-600 text-xl w-8 h-8 flex items-center justify-center">✕</button>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] flex items-end sm:items-center justify-center px-0 sm:px-4 animate-in fade-in duration-200">
+          <div className="bg-[#0a0a0a] border border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl h-[90vh] sm:h-[85vh] overflow-hidden flex flex-col shadow-2xl">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 flex-shrink-0 bg-[#050505]">
+              <h2 className="font-dot text-xl tracking-widest text-brand-500">FEATURED.ALL</h2>
+              <button onClick={() => setShowAllFeatured(false)} className="text-gray-500 hover:text-brand-500 font-mono tracking-widest text-xs px-3 py-1 border border-transparent hover:border-brand-500/30 rounded-full transition-all">[ ESC ]</button>
             </div>
-            <div className="overflow-y-auto p-4">
-              <div className="grid grid-cols-2 gap-3 items-stretch">
-                {featured.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+            <div className="overflow-y-auto p-5 bg-[#0a0a0a]">
+              <div className="grid grid-cols-2 gap-4 items-stretch">
+                {featured.map(product => <ProductCard key={product.id} product={product} />)}
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
 function Stars({ rating }) {
@@ -5,76 +6,82 @@ function Stars({ rating }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1,2,3,4,5].map(s => (
-        <span key={s} className={`text-xs ${s <= Math.round(rating) ? 'text-yellow-400' : 'text-gray-200'}`}>★</span>
+        <span key={s} className={`text-[10px] ${s <= Math.round(rating) ? 'text-brand-500' : 'text-gray-800'}`}>★</span>
       ))}
     </div>
   )
 }
 
 export default function ProductCard({ product, horizontal = false }) {
-  const { addToCart } = useApp()
+  const { addToCart, perfilIncompleto } = useApp()
+  const navigate = useNavigate()
+
+  function handleAgregar(e) {
+    e.preventDefault()
+    if (perfilIncompleto) {
+      navigate('/perfil')
+      return
+    }
+    addToCart(product)
+  }
 
   if (horizontal) {
     return (
-      <div className="flex-shrink-0 w-40 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-        <div className="h-28 bg-gray-100 overflow-hidden flex-shrink-0">
+      <div className="flex-shrink-0 w-40 bg-[#0a0a0a] rounded-3xl border border-white/5 overflow-hidden flex flex-col group hover:border-brand-500/50 transition-colors">
+        <div className="h-28 bg-[#151515] overflow-hidden flex-shrink-0 relative">
           {product.image_url
-            ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-            : <div className="w-full h-full flex items-center justify-center text-4xl">🛍️</div>
+            ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" />
+            : <div className="w-full h-full flex items-center justify-center text-4xl opacity-50">🛍️</div>
           }
         </div>
-        <div className="p-2.5 flex flex-col flex-1">
-          <p className="text-xs font-semibold text-gray-800 truncate">{product.name}</p>
-          <div className="h-4 mt-0.5">
+        <div className="p-3 flex flex-col flex-1">
+          <p className="text-xs font-mono uppercase tracking-tight text-white truncate">{product.name}</p>
+          <div className="h-4 mt-1">
             <Stars rating={product.avg_rating} />
           </div>
           <div className="flex items-center justify-between mt-auto pt-2">
-            <span className="text-brand-600 font-bold text-sm">${Number(product.price).toFixed(2)}</span>
-            <button
-              onClick={() => addToCart(product)}
-              className="w-7 h-7 bg-brand-600 hover:bg-brand-700 text-white rounded-full flex items-center justify-center text-lg leading-none transition-colors flex-shrink-0"
-            >+</button>
+            <span className="text-brand-500 font-mono text-sm tracking-wider">${Number(product.price).toFixed(2)}</span>
+            <button onClick={handleAgregar}
+              className="w-8 h-8 rounded-full border border-white/20 hover:border-brand-500 hover:bg-brand-500 text-white hover:text-black flex items-center justify-center text-lg leading-none transition-all flex-shrink-0 focus:outline-none"
+            >
+              {perfilIncompleto ? '🔒' : '+'}
+            </button>
           </div>
         </div>
       </div>
     )
   }
 
-  // Grid card — altura fija para que todos los botones queden al mismo nivel
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col h-full">
-      {/* Image — altura fija */}
-      <div className="h-40 bg-gray-100 overflow-hidden flex-shrink-0">
+    <div className="bg-[#0a0a0a] rounded-3xl border border-white/5 overflow-hidden flex flex-col h-full group hover:border-brand-500/50 transition-colors">
+      <div className="h-40 bg-[#151515] overflow-hidden flex-shrink-0 relative">
         {product.image_url
-          ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-          : <div className="w-full h-full flex items-center justify-center text-5xl bg-gradient-to-br from-gray-50 to-gray-100">🛍️</div>
+          ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity grayscale-[0.5] group-hover:grayscale-0" />
+          : <div className="w-full h-full flex items-center justify-center text-5xl bg-gradient-to-br from-[#111] to-[#050505] opacity-50">🛍️</div>
         }
       </div>
-
-      {/* Content — flex-1 para que el botón siempre quede al fondo */}
-      <div className="p-3 flex flex-col flex-1">
-        <p className="text-sm font-semibold text-gray-800 line-clamp-2 leading-tight">{product.name}</p>
-
-        {/* Stars — altura fija para que no desplace el botón */}
-        <div className="h-5 mt-1 flex items-center">
+      <div className="p-4 flex flex-col flex-1">
+        <p className="text-sm font-mono tracking-tight text-white line-clamp-2 leading-tight uppercase">{product.name}</p>
+        <div className="h-5 mt-2 flex items-center">
           <Stars rating={product.avg_rating} />
         </div>
-
         {product.description && (
-          <p className="text-xs text-gray-400 mt-1 line-clamp-2">{product.description}</p>
+          <p className="text-xs text-gray-500 mt-2 line-clamp-2 leading-relaxed">{product.description}</p>
         )}
-
         {!product.stock_ilimitado && product.stock <= 5 && product.stock > 0 && (
-          <p className="text-xs text-orange-500 mt-1">¡Solo {product.stock} disponibles!</p>
+          <p className="text-[10px] font-mono uppercase text-red-500 mt-2 tracking-widest border border-red-500/20 bg-red-500/10 inline-block px-2 py-0.5 rounded-full w-fit">Solo {product.stock} left</p>
         )}
-
-        {/* Price + button — siempre al fondo */}
-        <div className="flex items-center justify-between mt-auto pt-2">
-          <span className="text-brand-600 font-bold">${Number(product.price).toFixed(2)}</span>
-          <button
-            onClick={() => addToCart(product)}
-            className="bg-brand-600 hover:bg-brand-700 text-white text-xs px-3 py-1.5 rounded-xl transition-colors flex-shrink-0"
-          >Agregar</button>
+        <div className="flex items-center justify-between mt-auto pt-4 gap-2">
+          <span className="text-brand-500 font-mono tracking-wider">${Number(product.price).toFixed(2)}</span>
+          <button onClick={handleAgregar}
+            className={`text-xs px-4 py-2 font-mono uppercase tracking-widest rounded-full transition-all flex-shrink-0 border 
+              ${perfilIncompleto
+                ? 'border-gray-800 text-gray-500 hover:text-white'
+                : 'border-white/20 text-white hover:bg-brand-500 hover:border-brand-500 hover:text-black'
+              }`}
+          >
+            {perfilIncompleto ? 'LOCK' : 'ADD'}
+          </button>
         </div>
       </div>
     </div>

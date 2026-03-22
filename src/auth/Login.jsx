@@ -50,25 +50,29 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4">
+      {/* Decorative Grids */}
+      <div className="absolute inset-x-0 top-0 h-96 bg-brand-500/[0.02] bg-[radial-gradient(#CCFF00_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
 
+      <div className="w-full max-w-sm z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Market<span className="text-brand-600">Beta</span>
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-dot text-brand-500 tracking-widest flex justify-center items-center gap-2">
+            <span className="text-white">MARKET</span>BETA
           </h1>
-          <p className="text-gray-500 mt-2 text-sm">Inicia sesión en tu cuenta</p>
+          <p className="text-gray-500 mt-3 font-mono text-xs uppercase tracking-widest">Connect to network</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-[#0a0a0a] rounded-[2rem] border border-white/10 p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+          
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-500/50 to-transparent"></div>
 
           {/* Google button */}
           <button
             onClick={handleGoogle}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 disabled:bg-gray-50 text-gray-700 font-medium py-2.5 rounded-lg transition-colors text-sm mb-5"
+            className="w-full flex items-center justify-center gap-3 border border-white/20 hover:border-brand-500 hover:text-white disabled:opacity-50 text-gray-400 font-mono py-3 rounded-full transition-all text-xs uppercase tracking-widest mb-6"
           >
             <svg width="18" height="18" viewBox="0 0 48 48">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -77,20 +81,20 @@ export default function Login() {
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
               <path fill="none" d="M0 0h48v48H0z"/>
             </svg>
-            {googleLoading ? 'Conectando...' : 'Continuar con Google'}
+            {googleLoading ? 'CONNECTING...' : 'CONTINUE WITH GOOGLE'}
           </button>
 
           {/* Divider */}
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400">o con correo</span>
-            <div className="flex-1 h-px bg-gray-200" />
+          <div className="flex items-center gap-4 mb-6 opacity-30">
+            <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent to-white" />
+            <span className="text-[10px] font-mono text-white tracking-widest">OR</span>
+            <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent to-white" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Correo electrónico
+              <label className="block text-[10px] uppercase font-mono tracking-widest text-gray-500 mb-2">
+                EMAIL
               </label>
               <input
                 type="email"
@@ -98,14 +102,14 @@ export default function Login() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                placeholder="tu@correo.com"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
+                placeholder="USER@DOMAIN.COM"
+                className="w-full bg-[#151515] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-700 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-brand-500 font-mono transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Contraseña
+              <label className="block text-[10px] uppercase font-mono tracking-widest text-gray-500 mb-2">
+                PASSWORD
               </label>
               <input
                 type="password"
@@ -114,12 +118,12 @@ export default function Login() {
                 onChange={handleChange}
                 required
                 placeholder="••••••••"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
+                className="w-full bg-[#151515] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-700 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-brand-500 font-mono transition-all"
               />
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              <p className="text-[10px] font-mono tracking-widest uppercase text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-center">
                 {error}
               </p>
             )}
@@ -127,16 +131,16 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-brand-600 hover:bg-brand-700 disabled:bg-brand-300 text-white font-medium py-2.5 rounded-lg transition-colors text-sm"
+              className="w-full bg-brand-500 hover:bg-brand-400 focus:ring-4 ring-brand-500/30 disabled:opacity-50 disabled:bg-white/10 disabled:text-gray-500 text-black font-mono font-bold tracking-widest py-3.5 mt-2 rounded-full transition-all text-sm uppercase"
             >
-              {loading ? 'Entrando...' : 'Iniciar sesión'}
+              {loading ? 'AUTHENTICATING...' : 'LOGIN'}
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
-            ¿No tienes cuenta?{' '}
-            <Link to="/register" className="text-brand-600 hover:underline font-medium">
-              Regístrate
+          <p className="text-center text-[11px] font-mono uppercase tracking-wider text-gray-500 mt-8">
+            NO ACCOUNT?{' '}
+            <Link to="/register" className="text-brand-500 hover:text-white transition-colors">
+              REGISTER HERE
             </Link>
           </p>
         </div>

@@ -4,68 +4,88 @@ import { supabase } from '../services/supabaseClient'
 const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
-  const [session, setSession]   = useState(undefined)
-  const [usuario, setUsuario]   = useState(null)
-  const [cart, setCart]         = useState([])
-  const [loading, setLoading]   = useState(true)
+  const [session, setSession]           = useState(undefined)
+  const [usuario, setUsuario]           = useState(null)
+  const [cart, setCart]                 = useState([])
+  const [loading, setLoading]           = useState(true)
+  const [perfilIncompleto, setPerfilIncompleto] = useState(false)
 
-  // ── Auth listener ─────────────────────────────────────
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
-      if (session) fetchUsuario(session.user.id)
+      if (session) fetchUsuario(session)
       else setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      if (session) fetchUsuario(session.user.id)
-      else { setUsuario(null); setCart([]); setLoading(false) }
+      if (session) fetchUsuario(session)
+      else { setUsuario(null); setCart([]); setPerfilIncompleto(false); setLoading(false) }
     })
 
     return () => subscription.unsubscribe()
   }, [])
 
-  // ── Fetch perfil ──────────────────────────────────────
-  async function fetchUsuario(uid) {
-    const { data, error } = await supabase
+  async function fetchUsuario(session) {
+    const uid = session.user.id
+    const { data } = await supabase
       .from('usuarios')
       .select('*')
       .eq('id', uid)
       .single()
-    if (!error) setUsuario(data)
-    await fetchCart(uid)
+
+    if (data) {
+      setUsuario(data)
+      // Perfil incompleto si le falta numero_control o edad
+      const incompleto = !data.numero_control || data.numero_control === '' || data.edad === null || data.edad === undefined
+      setPerfilIncompleto(incompleto)
+      if (!incompleto) await fetchCart(uid)
+    } else {
+      // Usuario sin perfil (Google nuevo) — crear perfil mínimo automáticamente
+      const meta = session.user.user_metadata || {}
+      const { data: newUser } = await supabase
+        .from('usuarios')
+        .insert({
+          id:           uid,
+          email:        session.user.email,
+          nombre:       meta.full_name || meta.name || session.user.email,
+          tipo_usuario: 'comprador',
+          // numero_control y edad vacíos → perfilIncompleto = true
+        })
+        .select()
+        .single()
+
+      if (newUser) {
+        setUsuario(newUser)
+        setPerfilIncompleto(true)
+      }
+    }
     setLoading(false)
   }
 
-  // ── Cart persistente ──────────────────────────────────
   async function fetchCart(uid) {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('cart')
       .select('*, products(*)')
       .eq('user_id', uid)
 
-    if (!error && data) {
+    if (data) {
       setCart(data.map(item => ({
         cartItemId: item.id,
-        product: item.products,
-        quantity: item.quantity,
+        product:    item.products,
+        quantity:   item.quantity,
       })))
     }
   }
 
   async function addToCart(product) {
-    if (!session) return
+    if (!session || !usuario || perfilIncompleto) return
 
     const existing = cart.find(i => i.product.id === product.id)
 
     if (existing) {
       const newQty = existing.quantity + 1
-      await supabase
-        .from('cart')
-        .update({ quantity: newQty })
-        .eq('id', existing.cartItemId)
-
+      await supabase.from('cart').update({ quantity: newQty }).eq('id', existing.cartItemId)
       setCart(prev => prev.map(i =>
         i.product.id === product.id ? { ...i, quantity: newQty } : i
       ))
@@ -79,8 +99,8 @@ export function AppProvider({ children }) {
       if (!error && data) {
         setCart(prev => [...prev, {
           cartItemId: data.id,
-          product: data.products,
-          quantity: data.quantity,
+          product:    data.products,
+          quantity:   data.quantity,
         }])
       }
     }
@@ -115,7 +135,7 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={{
       session, usuario, setUsuario,
-      loading,
+      loading, perfilIncompleto, setPerfilIncompleto,
       cart, cartCount, cartTotal,
       addToCart, removeFromCart, updateQuantity, clearCart,
       fetchUsuario, fetchCart,

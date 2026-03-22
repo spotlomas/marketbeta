@@ -1,11 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 
-/**
- * Protege rutas que requieren sesión activa.
- * Muestra spinner mientras Supabase verifica la sesión (loading = true).
- * Si no hay sesión, redirige a /login.
- */
 export default function ProtectedRoute() {
   const { session, loading } = useApp()
 
