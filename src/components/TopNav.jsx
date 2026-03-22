@@ -13,24 +13,27 @@ export default function TopNav() {
   }
 
   return (
-    <nav className="bg-[#050505]/70 backdrop-blur-lg border-b border-white/10 sticky top-0 z-40">
-      <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
+    <nav className="bg-white sticky top-0 z-40 shadow-sm border-b border-gray-100">
+      <div className="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
-        {/* Logo */}
-        <Link to="/" className="text-xl font-dot text-brand-500 tracking-wider flex-shrink-0 flex items-center gap-2">
-          <span className="text-white">MARKET</span>BETA
+        {/* Logo / Location */}
+        <Link to="/" className="flex flex-col flex-shrink-0 group">
+          <span className="text-[10px] text-gray-500 font-inter font-medium uppercase tracking-wide group-hover:text-food-500 transition-colors">Entregar ahora</span>
+          <span className="text-sm font-inter font-bold text-gray-900 flex items-center gap-1">
+            Ubicación actual <span className="text-food-500 text-xs mt-0.5">▼</span>
+          </span>
         </Link>
 
         {/* Right actions */}
         <div className="flex items-center gap-3">
           {usuario?.es_admin && (
-            <Link to="/admin" className="text-xs bg-red-500/10 border border-red-500/30 text-red-500 px-3 py-1 rounded-full font-mono uppercase tracking-widest">
+            <Link to="/admin" className="text-[10px] bg-red-50 text-red-600 px-3 py-1.5 rounded-full font-inter font-bold uppercase tracking-wide">
               Admin
             </Link>
           )}
 
           {usuario?.tipo_usuario === 'vendedor' && (
-            <Link to="/seller" className="text-xs bg-brand-500/10 border border-brand-500/30 text-brand-500 px-3 py-1 rounded-full font-mono uppercase tracking-widest hidden sm:block">
+            <Link to="/seller" className="text-xs bg-gray-100 border border-gray-200 text-gray-800 px-3 py-1.5 rounded-full font-inter font-medium hidden sm:block hover:bg-gray-200 transition-colors">
               Mi Tienda
             </Link>
           )}
@@ -38,8 +41,8 @@ export default function TopNav() {
           <NotificationBell />
 
           <button onClick={handleLogout}
-            className="text-xs font-mono uppercase tracking-widest text-gray-400 hover:text-white transition-colors">
-            Salir
+            className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200 text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-all">
+            <span className="text-sm leading-none">👤</span>
           </button>
         </div>
       </div>

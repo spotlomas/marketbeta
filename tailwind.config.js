@@ -15,6 +15,13 @@ export default {
           700: '#779900',
           900: '#334400',
         },
+        food: {
+          50: '#e6f9ef',
+          100: '#ccefdc',
+          500: '#06c167', // Uber Eats Green
+          600: '#05a85a',
+          700: '#048f4d',
+        },
         background: '#050505',
         surface: '#121212',
       },
@@ -22,6 +29,7 @@ export default {
         sans: ['"Space Grotesk"', 'sans-serif'],
         dot: ['"DotGothic16"', 'sans-serif'],
         mono: ['"Space Mono"', 'monospace'],
+        inter: ['"Inter"', 'sans-serif'],
       }
     },
   },

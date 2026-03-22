@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../services/supabaseClient'
 import { useApp } from '../context/AppContext'
-import Navbar from '../components/Navbar'
+import TopNav from '../components/TopNav'
+import BottomNav from '../components/BottomNav'
 
 export default function MisCompras() {
   const { session } = useApp()
@@ -12,10 +13,8 @@ export default function MisCompras() {
   useEffect(() => {
     fetchOrders()
 
-    // Actualizar cada 10 segundos para reflejar confirmaciones del vendedor
     const interval = setInterval(fetchOrders, 10000)
 
-    // Suscripción realtime a cambios en orders
     const channel = supabase
       .channel('mis-compras')
       .on('postgres_changes', {
@@ -43,7 +42,6 @@ export default function MisCompras() {
 
     if (data) {
       setOrders(data)
-      // Si hay una orden seleccionada, actualizarla también
       if (selected) {
         const updated = data.find(o => o.id === selected.id)
         if (updated) setSelected(updated)
@@ -56,31 +54,31 @@ export default function MisCompras() {
   const entregadas = orders.filter(o => o.status === 'entregado')
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
-      <Navbar />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
-        <div className="mb-10 border-b border-white/10 pb-6">
-          <h1 className="text-2xl font-dot tracking-widest text-[#CCFF00]">PURCHASE_LEDGER</h1>
-          <p className="text-gray-500 text-[10px] font-mono tracking-widest uppercase mt-2">Dynamic syncing enabled: Awaiting vendor confirmations</p>
+    <div className="min-h-screen bg-white text-gray-900 font-inter pb-24">
+      <TopNav />
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8 border-b border-gray-100 pb-5">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Mis Pedidos</h1>
+          <p className="text-gray-500 text-sm font-medium mt-1">Historial de compras y pedidos activos</p>
         </div>
 
         {loading ? (
-          <div className="flex animate-pulse items-center gap-3">
-            <div className="w-2 h-2 bg-brand-500 rounded-full"></div>
-            <p className="text-[10px] font-mono uppercase tracking-widest text-brand-500">Querying transactions...</p>
+          <div className="flex animate-pulse items-center gap-2">
+            <div className="w-2 h-2 bg-food-500 rounded-full"></div>
+            <p className="text-sm font-medium text-food-500">Cargando historial...</p>
           </div>
         ) : orders.length === 0 ? (
-          <div className="text-center py-24 text-gray-600 border border-white/5 rounded-3xl bg-[#0a0a0a]">
-            <p className="text-4xl mb-4 font-mono font-light text-brand-500 opacity-50">NULL</p>
-            <p className="text-[10px] uppercase font-mono tracking-widest">No transactions recorded in ledger</p>
+          <div className="text-center py-24 bg-gray-50 border border-gray-100 rounded-3xl">
+            <p className="text-5xl mb-4 opacity-40">🧾</p>
+            <p className="text-sm font-semibold text-gray-500">Aún no tienes pedidos registrados</p>
           </div>
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-10">
             {pendientes.length > 0 && (
               <section>
-                <h2 className="text-[11px] font-mono text-yellow-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
-                  Pending Finalization ({pendientes.length})
+                <h2 className="text-sm font-bold text-orange-600 uppercase tracking-wide mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+                  En Curso ({pendientes.length})
                 </h2>
                 <div className="space-y-4">
                   {pendientes.map(order => (
@@ -91,10 +89,10 @@ export default function MisCompras() {
             )}
 
             {entregadas.length > 0 && (
-              <section className="opacity-70">
-                <h2 className="text-[11px] font-mono text-green-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <span className="text-xl">✓</span>
-                  Fulfilled Operations ({entregadas.length})
+              <section className={pendientes.length > 0 ? "opacity-90" : ""}>
+                <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 flex items-center gap-2">
+                  <span className="text-lg leading-none">✓</span>
+                  Completados ({entregadas.length})
                 </h2>
                 <div className="space-y-4">
                   {entregadas.map(order => (
@@ -106,43 +104,41 @@ export default function MisCompras() {
           </div>
         )}
       </main>
+      <BottomNav />
 
-      {/* QR Modal */}
       {selected && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-[#0a0a0a] border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#CCFF00] blur-[80px] opacity-10 pointer-events-none"></div>
-            
-            <div className="flex items-center justify-between mb-6 relative">
-              <h2 className="font-dot text-lg tracking-widest text-[#CCFF00]">AUTH_KEY</h2>
-              <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-white font-mono transition-colors">✕</button>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 px-0 sm:px-4 animate-in fade-in duration-200">
+          <div className="bg-white border border-gray-100 rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-sm shadow-2xl relative overflow-hidden">
+            <div className="flex items-center justify-between mb-6 relative border-b border-gray-100 pb-4">
+              <h2 className="font-bold text-xl tracking-tight text-gray-900">Código de Recolección</h2>
+              <button onClick={() => setSelected(null)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">✕</button>
             </div>
 
             {selected.status === 'entregado' ? (
               <div className="text-center py-8 relative">
-                <div className="text-6xl mb-4 text-[#CCFF00]">✓</div>
-                <p className="font-mono font-bold tracking-widest uppercase text-green-500 text-sm">Transfer Verified</p>
-                <p className="text-xs text-white uppercase font-mono tracking-widest mt-2">{selected.products?.name}</p>
+                <div className="w-20 h-20 mx-auto bg-green-50 text-green-500 rounded-full flex items-center justify-center text-4xl mb-4">✓</div>
+                <p className="font-bold text-gray-900 text-xl">Pedido Entregado</p>
+                <p className="text-gray-500 text-sm font-medium mt-1">{selected.products?.name}</p>
                 {selected.confirmed_at && (
-                  <p className="text-[9px] text-gray-500 mt-4 font-mono tracking-widest uppercase">
-                    TS_CONFIRMED: {new Date(selected.confirmed_at).toISOString()}
+                  <p className="text-xs text-gray-400 mt-4 font-medium">
+                    Entregado el: {new Date(selected.confirmed_at).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </p>
                 )}
               </div>
             ) : (
-              <div className="flex flex-col items-center relative">
-                <p className="text-[10px] text-white uppercase tracking-widest font-mono mb-6 text-center">{selected.products?.name}</p>
-                <div className="bg-[#CCFF00] p-3 rounded-2xl relative">
+              <div className="flex flex-col items-center relative py-2">
+                <p className="text-sm text-gray-500 font-bold uppercase tracking-wider mb-6 text-center line-clamp-2">{selected.products?.name}</p>
+                <div className="p-4 rounded-2xl border border-gray-200 shadow-sm bg-white mb-6">
                    <img
-                     src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(selected.id)}&color=000000&bgcolor=CCFF00`}
+                     src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(selected.id)}&color=000000&bgcolor=ffffff`}
                      alt="QR"
-                     className="w-52 h-52 mix-blend-multiply"
+                     className="w-48 h-48"
                    />
                 </div>
-                <p className="text-[9px] text-brand-500 mt-6 text-center font-mono uppercase tracking-widest">
-                  Present to vendor scanner for handshake
+                <p className="text-sm font-semibold text-gray-900 text-center">
+                  Muestra este código al vendedor
                 </p>
-                <p className="text-[10px] font-mono text-gray-600 mt-2 bg-white/5 py-1 px-3 rounded-full border border-white/10">ID: {selected.id.slice(0, 16)}...</p>
+                <p className="text-xs text-gray-500 mt-2 bg-gray-50 py-1.5 px-4 rounded-full border border-gray-200 font-mono">ID: {selected.id.slice(0, 8).toUpperCase()}</p>
               </div>
             )}
           </div>
@@ -156,31 +152,31 @@ function OrderCard({ order, onShowQR }) {
   const isPending = order.status === 'pendiente_entrega'
   
   return (
-    <div className={`bg-[#0a0a0a] rounded-3xl border border-white/5 p-4 flex items-center gap-4 transition-all ${isPending ? 'hover:border-brand-500/30' : ''}`}>
-      <div className="w-16 h-16 rounded-2xl overflow-hidden bg-[#151515] flex-shrink-0 border border-white/5">
+    <div className={`bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-4 transition-all shadow-sm ${isPending ? 'hover:shadow-md' : ''}`}>
+      <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
         {order.products?.image_url
-          ? <img src={order.products.image_url} alt={order.products?.name} className="w-full h-full object-cover grayscale opacity-80" />
+          ? <img src={order.products.image_url} alt={order.products?.name} className="w-full h-full object-cover" />
           : <div className="w-full h-full flex items-center justify-center text-2xl opacity-30">🛍️</div>
         }
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-mono text-[11px] uppercase tracking-widest text-white truncate">{order.products?.name}</p>
-        <p className="text-[#CCFF00] font-mono tracking-widest text-sm mt-1">${Number(order.amount).toFixed(2)}</p>
-        <div className="flex items-center gap-3 mt-2">
+        <p className="font-bold text-gray-900 text-base truncate">{order.products?.name}</p>
+        <p className="text-food-600 font-bold text-sm mt-0.5">${Number(order.amount).toFixed(2)}</p>
+        <div className="flex items-center gap-2 mt-1.5">
           {isPending 
-            ? <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 uppercase tracking-widest">PENDING</span>
-            : <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 border border-green-500/20 uppercase tracking-widest">FULFILLED</span>
+            ? <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 uppercase tracking-wide">Pendiente</span>
+            : <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 uppercase tracking-wide">Completado</span>
           }
-          <span className="text-[9px] font-mono text-gray-600 tracking-widest">{new Date(order.created_at).toLocaleDateString('es-MX')}</span>
+          <span className="text-[10px] font-medium text-gray-400">{new Date(order.created_at).toLocaleDateString('es-MX')}</span>
         </div>
       </div>
       {isPending && onShowQR && (
         <button onClick={onShowQR}
-          className="text-[10px] uppercase font-mono font-bold tracking-widest bg-[#CCFF00] hover:bg-brand-400 text-black px-4 py-2 rounded-full transition-colors flex-shrink-0 shadow-[0_0_10px_rgba(204,255,0,0.1)]">
-          SHOW_QR
+          className="text-xs font-bold bg-food-50 text-food-600 hover:bg-food-100 hover:text-food-700 px-4 py-2.5 rounded-full transition-colors flex-shrink-0">
+          Ver QR
         </button>
       )}
-      {!isPending && <span className="text-xl text-gray-600">✓</span>}
+      {!isPending && <span className="text-xl text-green-500 mr-2">✓</span>}
     </div>
   )
 }

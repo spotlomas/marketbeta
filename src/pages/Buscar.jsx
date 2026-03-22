@@ -41,51 +41,53 @@ export default function Buscar() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white pb-24">
+    <div className="min-h-screen bg-white text-gray-900 pb-24 font-inter">
       <TopNav />
 
-      <div className="bg-[#050505]/80 backdrop-blur-xl px-4 py-4 sticky top-14 z-30 border-b border-white/10">
-        <div className="flex items-center gap-3 bg-[#121212] border border-white/10 rounded-full py-3 px-5 transition-all focus-within:border-brand-500 shadow-[0_0_20px_transparent] focus-within:shadow-[0_0_15px_rgba(204,255,0,0.1)]">
-          <span className="text-brand-500 animate-pulse">🔍</span>
+      <div className="bg-white/90 backdrop-blur-xl px-4 py-4 sticky top-14 z-30 border-b border-gray-100">
+        <div className="flex items-center gap-3 bg-gray-100 rounded-full py-3.5 px-5 transition-all focus-within:bg-gray-200 focus-within:shadow-sm">
+          <span className="text-gray-400 text-lg">🔍</span>
           <input
             autoFocus
             value={query}
             onChange={e => handleSearch(e.target.value)}
-            placeholder="ENTER SEARCH PARAMS..."
-            className="flex-1 bg-transparent text-sm font-mono tracking-widest uppercase text-white placeholder-gray-600 focus:outline-none"
+            placeholder="Busca comida, tiendas, productos..."
+            className="flex-1 bg-transparent text-sm font-medium text-gray-900 placeholder-gray-500 focus:outline-none"
           />
           {query && (
             <button onClick={() => { setQuery(''); setProducts([]); setStores([]); setSearched(false) }}
-              className="text-gray-500 hover:text-brand-500 font-mono transition-colors">✕</button>
+              className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-300 text-gray-600 hover:bg-gray-400 font-bold transition-colors text-xs">✕</button>
           )}
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-8">
         {!searched && (
-          <div className="text-center py-24 text-gray-600">
-            <div className="text-4xl mb-4 font-mono font-light border border-white/10 rounded-full w-24 h-24 mx-auto flex items-center justify-center bg-[#0a0a0a]">SYS</div>
-            <p className="text-[10px] font-mono tracking-widest uppercase">INPUT REQUIRES AT LEAST 2 CHARACTERS</p>
+          <div className="text-center py-24 text-gray-500">
+            <div className="text-4xl mb-4 w-24 h-24 mx-auto flex items-center justify-center bg-gray-50 rounded-full border border-gray-100">🍽️</div>
+            <p className="text-sm font-medium">Ingresa al menos 2 caracteres para buscar</p>
           </div>
         )}
 
         {loading && (
           <div className="text-center py-12">
-            <div className="border border-brand-500/20 bg-brand-500/5 text-brand-500 font-mono text-[10px] uppercase tracking-widest px-6 py-2 rounded-full inline-block animate-pulse">SEARCHING_DATABASE_INDEX...</div>
+            <div className="bg-gray-50 text-gray-500 font-medium text-sm px-6 py-2 rounded-full inline-block animate-pulse border border-gray-100">Buscando...</div>
           </div>
         )}
 
         {searched && !loading && products.length === 0 && stores.length === 0 && (
-          <div className="text-center py-20 text-gray-500 border border-white/5 bg-[#0a0a0a] rounded-3xl mx-2">
-            <p className="font-dot text-2xl text-red-500 mb-2">404_NOT_FOUND</p>
-            <p className="text-[10px] font-mono uppercase tracking-widest">NO ENTRIES MATCHING [{query}]</p>
+          <div className="text-center py-20 text-gray-500 bg-gray-50 border border-gray-100 rounded-3xl mx-2">
+            <p className="font-bold text-2xl text-gray-900 mb-2">No hay resultados</p>
+            <p className="text-sm">No encontramos nada para "{query}"</p>
           </div>
         )}
 
         {stores.length > 0 && (
           <section>
-            <h2 className="font-dot text-lg border-b border-white/10 pb-2 mb-4 tracking-widest">STORES.LISTING <span className="text-[10px] text-brand-500 font-mono">({stores.length})</span></h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 snap-x" style={{ scrollbarWidth: 'none' }}>
+            <h2 className="font-bold text-xl tracking-tight text-gray-900 border-b border-gray-100 pb-3 mb-4 flex items-center gap-2">
+              Tiendas <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{stores.length}</span>
+            </h2>
+            <div className="flex gap-4 overflow-x-auto pb-4 snap-x -mx-4 px-4 scrollbar-hide">
               {stores.map(store => <div className="snap-center" key={store.id}><StoreCard store={store} /></div>)}
             </div>
           </section>
@@ -93,7 +95,9 @@ export default function Buscar() {
 
         {products.length > 0 && (
           <section>
-            <h2 className="font-dot text-lg border-b border-white/10 pb-2 mb-4 tracking-widest mt-8">PRODUCTS.DATA <span className="text-[10px] text-brand-500 font-mono">({products.length})</span></h2>
+            <h2 className="font-bold text-xl tracking-tight text-gray-900 border-b border-gray-100 pb-3 mb-4 mt-8 flex items-center gap-2">
+              Productos <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{products.length}</span>
+            </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {products.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
