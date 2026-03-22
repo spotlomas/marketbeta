@@ -53,52 +53,52 @@ export default function Tienda() {
     : null
 
   if (!store && !loading) return (
-    <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center text-gray-500 font-mono transition-colors">
-      <p className="font-bold text-xl text-white mb-2 tracking-widest uppercase">STORE_NOT_FOUND</p>
-      <p className="text-[10px] uppercase tracking-widest text-gray-500">The requested seller profile does not exist or has been terminated.</p>
+    <div className="min-h-screen bg-white dark:bg-[#050505] flex flex-col items-center justify-center text-gray-500 transition-colors">
+      <p className="font-bold text-xl text-gray-900 dark:text-white mb-2">Tienda no encontrada</p>
+      <p className="text-sm text-gray-500">Esta tienda no existe o fue eliminada.</p>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white pb-24 font-inter transition-colors">
+    <div className="min-h-screen bg-white dark:bg-[#050505] text-gray-900 dark:text-white pb-24 font-inter transition-colors">
       <TopNav />
 
-      {/* Store header */}
-      <div className="relative overflow-hidden bg-[#0A0A0A] border-b border-white/10">
-        <div className="h-44 relative overflow-hidden bg-[#121212]">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#0A0A0A]/50 to-transparent z-10 pointer-events-none"></div>
+      {/* Cabecera de la tienda */}
+      <div className="relative overflow-hidden bg-gray-50 dark:bg-[#0A0A0A] border-b border-gray-200 dark:border-white/10">
+        <div className="h-44 relative overflow-hidden bg-gray-100 dark:bg-[#121212]">
+          <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#050505] via-white/50 dark:via-[#0A0A0A]/50 to-transparent z-10 pointer-events-none"></div>
           {store?.imagen_tienda && (
-            <img src={store.imagen_tienda} alt={store.nombre_tienda} className="w-full h-full object-cover absolute inset-0 mix-blend-screen opacity-50" />
+            <img src={store.imagen_tienda} alt={store.nombre_tienda} className="w-full h-full object-cover absolute inset-0 opacity-60 dark:opacity-50 dark:mix-blend-screen" />
           )}
         </div>
         <div className="px-6 pb-6 -mt-12 relative z-20 max-w-3xl mx-auto">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[2rem] border-2 border-[#121212] flex items-center justify-center text-4xl mb-4 overflow-hidden relative shadow-[0_0_30px_rgba(204,255,0,0.1)] bg-[#121212]">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[2rem] border-2 border-white dark:border-[#121212] flex items-center justify-center text-4xl mb-4 overflow-hidden relative shadow-lg bg-gray-100 dark:bg-[#121212]">
             {store?.imagen_tienda ? (
               <img src={store.imagen_tienda} alt="logo" className="w-full h-full object-cover" />
             ) : (
               <span className="opacity-50">🏪</span>
             )}
           </div>
-          <h1 className="text-2xl font-mono tracking-widest uppercase text-[#CCFF00]">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             {store?.nombre_tienda || store?.nombre}
           </h1>
           {store?.descripcion_tienda && (
-            <p className="text-[10px] text-gray-400 mt-2 font-mono tracking-widest uppercase leading-relaxed max-w-lg">{store.descripcion_tienda}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed max-w-lg">{store.descripcion_tienda}</p>
           )}
-          <div className="flex flex-wrap items-center gap-2 mt-5 text-[9px] font-mono font-bold tracking-widest text-white uppercase">
+          <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
             {avgRating ? (
-              <div className="bg-[#121212] px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-white/5">
-                <span className="text-[#CCFF00]">★</span>
-                <span>{avgRating} ({reviews.length})</span>
+              <div className="bg-gray-100 dark:bg-[#121212] px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-gray-200 dark:border-white/5">
+                <span className="text-yellow-500 dark:text-[#CCFF00]">★</span>
+                <span className="text-gray-700 dark:text-white font-medium">{avgRating} ({reviews.length})</span>
               </div>
             ) : (
-              <div className="bg-[#121212] px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-white/5">
-                <span className="text-gray-500">★</span>
-                <span>NEW_RELEASE</span>
+              <div className="bg-gray-100 dark:bg-[#121212] px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-gray-200 dark:border-white/5">
+                <span className="text-gray-400">★</span>
+                <span className="text-gray-500">Nuevo</span>
               </div>
             )}
-            <div className="bg-[#121212] px-3 py-1.5 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-white/5">
-              <span>{products.length} INSTANCES</span>
+            <div className="bg-gray-100 dark:bg-[#121212] px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/5">
+              <span className="text-gray-700 dark:text-white font-medium">{products.length} productos</span>
             </div>
           </div>
         </div>
@@ -106,23 +106,20 @@ export default function Tienda() {
 
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-12 relative z-10">
 
-        {/* Products */}
+        {/* Productos */}
         <section>
-          <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-3">
-            <h2 className="font-mono text-sm tracking-widest uppercase text-white flex items-center gap-2">
-               <span className="w-1.5 h-1.5 bg-[#CCFF00] rounded-full"></span>
-               PRODUCT_CATALOG
-            </h2>
+          <div className="flex items-center justify-between mb-6 border-b border-gray-200 dark:border-white/10 pb-3">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Productos</h2>
           </div>
           {loading ? (
             <div className="grid grid-cols-2 gap-4">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="bg-[#121212] border border-white/5 rounded-3xl animate-pulse h-48 shadow-[0_0_15px_rgba(0,0,0,0.5)]" />
+                <div key={i} className="bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-white/5 rounded-3xl animate-pulse h-48" />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-16 bg-[#0A0A0A] border border-white/5 rounded-3xl shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-               <p className="text-[10px] font-mono tracking-widest uppercase text-gray-500">SELLER_HAS_NO_ACTIVE_LISTINGS.</p>
+            <div className="text-center py-16 bg-gray-50 dark:bg-[#0A0A0A] border border-gray-200 dark:border-white/5 rounded-3xl">
+               <p className="text-sm text-gray-500">Esta tienda aún no tiene productos.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4">
@@ -131,26 +128,26 @@ export default function Tienda() {
           )}
         </section>
 
-        {/* Reviews */}
+        {/* Reseñas */}
         {reviews.length > 0 && (
           <section>
-            <h2 className="font-mono text-sm tracking-widest uppercase text-white mb-6 border-b border-white/10 pb-3 flex items-center gap-2">
-              USER_TELEMETRY 
-              <span className="text-[9px] bg-[#CCFF00]/10 border border-[#CCFF00]/30 text-[#CCFF00] px-2 py-0.5 rounded font-bold">{reviews.length} LOGS</span>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-white/10 pb-3 flex items-center gap-2">
+              Reseñas 
+              <span className="text-xs bg-green-50 dark:bg-[#CCFF00]/10 border border-green-200 dark:border-[#CCFF00]/30 text-green-600 dark:text-[#CCFF00] px-2 py-0.5 rounded-full font-medium">{reviews.length}</span>
             </h2>
             <div className="space-y-4">
               {reviews.map(r => (
-                <div key={r.id} className="bg-[#0A0A0A] rounded-2xl p-5 border border-white/5 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <div key={r.id} className="bg-gray-50 dark:bg-[#0A0A0A] rounded-2xl p-5 border border-gray-200 dark:border-white/5">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-[10px] font-mono font-bold tracking-widest uppercase text-[#CCFF00] truncate max-w-[60%]">{r.usuarios?.nombre || 'ANON_USER'}</p>
-                    <div className="flex gap-0.5 bg-[#121212] px-2 py-1 rounded-full border border-white/5">
+                    <p className="text-sm font-bold text-gray-900 dark:text-white truncate max-w-[60%]">{r.usuarios?.nombre || 'Anónimo'}</p>
+                    <div className="flex gap-0.5 bg-gray-100 dark:bg-[#121212] px-2 py-1 rounded-full border border-gray-200 dark:border-white/5">
                       {[1,2,3,4,5].map(s => (
-                        <span key={s} className={`text-[10px] ${s <= r.rating ? 'text-[#CCFF00]' : 'text-gray-700'}`}>★</span>
+                        <span key={s} className={`text-[10px] ${s <= r.rating ? 'text-yellow-500 dark:text-[#CCFF00]' : 'text-gray-300 dark:text-gray-700'}`}>★</span>
                       ))}
                     </div>
                   </div>
-                  {r.comment && <p className="text-xs text-gray-300 font-inter leading-relaxed mt-2">{r.comment}</p>}
-                  <p className="text-[8px] text-gray-600 font-mono tracking-widest uppercase mt-4">TIMESTAMP: {new Date(r.created_at).toISOString().split('T')[0]}</p>
+                  {r.comment && <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-2">{r.comment}</p>}
+                  <p className="text-xs text-gray-400 dark:text-gray-600 mt-4">{new Date(r.created_at).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                 </div>
               ))}
             </div>

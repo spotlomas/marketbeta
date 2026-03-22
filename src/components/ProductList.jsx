@@ -5,11 +5,11 @@ export default function ProductList({ products, loading }) {
     return (
       <div className="grid grid-cols-2 gap-3">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white rounded-2xl border border-gray-100 animate-pulse">
-            <div className="bg-gray-200 h-40 rounded-t-2xl" />
+          <div key={i} className="bg-white dark:bg-[#0a0a0a] rounded-2xl border border-gray-100 dark:border-white/5 animate-pulse">
+            <div className="bg-gray-200 dark:bg-[#121212] h-40 rounded-t-2xl" />
             <div className="p-3 space-y-2">
-              <div className="h-3 bg-gray-200 rounded w-3/4" />
-              <div className="h-3 bg-gray-200 rounded w-1/3" />
+              <div className="h-3 bg-gray-200 dark:bg-[#121212] rounded w-3/4" />
+              <div className="h-3 bg-gray-200 dark:bg-[#121212] rounded w-1/3" />
             </div>
           </div>
         ))}

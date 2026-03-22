@@ -127,10 +127,12 @@ export default function Perfil() {
 
   const esVendedor = form.tipo_usuario === 'vendedor'
 
+  const inputBase = "w-full rounded-xl px-4 py-3 text-sm outline-none transition-all border bg-gray-100 dark:bg-[#121212] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
+  const inputNormal = `${inputBase} border-gray-200 dark:border-white/5 focus:border-green-500 dark:focus:border-[#CCFF00]/50`
+  const inputError  = `${inputBase} border-red-300 dark:border-red-500/50 focus:border-red-500 bg-red-50 dark:bg-red-950/10`
+
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-inter pb-32 transition-colors relative">
-      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#CCFF00]/10 to-transparent pointer-events-none z-0"></div>
-      
+    <div className="min-h-screen bg-white dark:bg-[#050505] text-gray-900 dark:text-white font-inter pb-32 transition-colors relative">
       <div className="relative z-10">
         <TopNav />
       </div>
@@ -139,53 +141,53 @@ export default function Perfil() {
 
         {/* Banner perfil incompleto */}
         {perfilIncompleto && (
-          <div className="bg-orange-950/30 border border-orange-900/50 rounded-3xl p-5 flex gap-5 items-center shadow-[0_0_20px_rgba(255,165,0,0.1)]">
+          <div className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900/50 rounded-3xl p-5 flex gap-5 items-center">
             <span className="text-3xl text-orange-500 animate-pulse">⚠️</span>
             <div>
-              <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#CCFF00]">INCOMPLETE_USER_PROFILE</p>
-              <p className="text-[9px] font-mono tracking-widest text-orange-400 mt-1 uppercase">
-                REQUIRED_DATA_MISSING_FOR_OPERATION
+              <p className="text-sm font-bold text-orange-600 dark:text-orange-400">Perfil incompleto</p>
+              <p className="text-xs text-orange-500 dark:text-orange-400 mt-1">
+                Completa tus datos para poder comprar
               </p>
             </div>
           </div>
         )}
 
-        {/* User info */}
-        <div className="bg-[#0A0A0A] rounded-[2rem] p-6 border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center gap-5">
-          <div className="w-20 h-20 bg-[#121212] rounded-[1.5rem] border border-[#CCFF00]/30 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-[0_0_15px_rgba(204,255,0,0.1)]">
+        {/* Info del usuario */}
+        <div className="bg-gray-50 dark:bg-[#0A0A0A] rounded-[2rem] p-6 border border-gray-200 dark:border-white/5 flex items-center gap-5">
+          <div className="w-20 h-20 bg-gray-100 dark:bg-[#121212] rounded-[1.5rem] border border-green-200 dark:border-[#CCFF00]/30 flex items-center justify-center overflow-hidden flex-shrink-0">
             {session?.user?.user_metadata?.avatar_url
               ? <img src={session.user.user_metadata.avatar_url} alt="avatar" className="w-full h-full object-cover" />
-              : <span className="text-3xl text-gray-500 opacity-50">{esVendedor ? '🏪' : '👤'}</span>
+              : <span className="text-3xl text-gray-400 opacity-50">{esVendedor ? '🏪' : '👤'}</span>
             }
           </div>
           <div>
-            <p className="font-mono font-bold text-lg tracking-wider text-white uppercase">{usuario?.nombre || session?.user?.user_metadata?.full_name || 'GUEST_USER'}</p>
-            <p className="text-[10px] font-mono tracking-widest uppercase text-gray-400 mt-1 opacity-70 border bg-[#121212] border-white/5 px-3 py-1 rounded w-fit">{session?.user?.email}</p>
+            <p className="font-bold text-lg text-gray-900 dark:text-white">{usuario?.nombre || session?.user?.user_metadata?.full_name || 'Usuario'}</p>
+            <p className="text-xs text-gray-400 mt-1 bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-white/5 px-3 py-1 rounded w-fit">{session?.user?.email}</p>
           </div>
         </div>
 
         {/* Formulario */}
-        <div className="bg-[#0A0A0A] rounded-[2rem] p-6 md:p-8 border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-          <h2 className="font-mono text-[11px] text-[#CCFF00] uppercase tracking-widest mb-2 border-b border-white/10 pb-4">
-            {perfilIncompleto ? 'SYSTEM_CONFIGURATION_REQUIREMENT' : 'ACCOUNT_PREFERENCES'}
+        <div className="bg-gray-50 dark:bg-[#0A0A0A] rounded-[2rem] p-6 md:p-8 border border-gray-200 dark:border-white/5">
+          <h2 className="text-base font-bold text-gray-900 dark:text-white mb-2 border-b border-gray-200 dark:border-white/10 pb-4">
+            {perfilIncompleto ? 'Completa tu Perfil' : 'Ajustes de Cuenta'}
           </h2>
 
           <form onSubmit={saveProfile} className="space-y-6 mt-6">
 
             {/* Tipo de cuenta */}
             <div>
-              <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-3">USER_CLASS</label>
+              <label className="block text-xs font-medium text-gray-500 mb-3">Tipo de cuenta</label>
               <div className="grid grid-cols-2 gap-3">
                 {['comprador', 'vendedor'].map(tipo => (
                   <button key={tipo} type="button"
                     onClick={() => setForm(p => ({ ...p, tipo_usuario: tipo }))}
-                    className={`flex flex-col items-center justify-center gap-3 py-5 rounded-[1.5rem] text-[10px] font-mono uppercase tracking-widest transition-all
+                    className={`flex flex-col items-center justify-center gap-3 py-5 rounded-[1.5rem] text-xs font-medium transition-all
                       ${form.tipo_usuario === tipo
-                        ? 'border border-[#CCFF00] bg-[#CCFF00]/10 text-[#CCFF00] shadow-[0_0_15px_rgba(204,255,0,0.1)]'
-                        : 'border border-white/5 bg-[#121212] hover:bg-[#1a1a1a] text-gray-500 hover:text-white'
+                        ? 'border border-green-500 dark:border-[#CCFF00] bg-green-50 dark:bg-[#CCFF00]/10 text-green-600 dark:text-[#CCFF00]'
+                        : 'border border-gray-200 dark:border-white/5 bg-gray-100 dark:bg-[#121212] hover:bg-gray-200 dark:hover:bg-[#1a1a1a] text-gray-500 hover:text-gray-900 dark:hover:text-white'
                       }`}>
                     <span className="text-3xl opacity-80">{tipo === 'comprador' ? '🛒' : '🏪'}</span>
-                    <span className="mt-1">{tipo === 'comprador' ? 'BUYER' : 'MERCHANT'}</span>
+                    <span className="mt-1">{tipo === 'comprador' ? 'Comprador' : 'Vendedor'}</span>
                   </button>
                 ))}
               </div>
@@ -193,155 +195,151 @@ export default function Perfil() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 flex items-center justify-between">
-                  <span>ID_CONTROL</span>
+                <label className="block text-xs font-medium text-gray-500 mb-2 flex items-center justify-between">
+                  <span>No. de Control</span>
                   {perfilIncompleto && !form.numero_control && <span className="text-red-500 animate-pulse text-lg leading-none">*</span>}
                 </label>
                 <input value={form.numero_control}
                   onChange={e => setForm(p => ({ ...p, numero_control: e.target.value }))}
                   placeholder="21XXXXXX"
-                  className={`w-full bg-[#121212] rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none transition-all uppercase tracking-widest border
-                    ${perfilIncompleto && !form.numero_control ? 'border-red-500/50 focus:border-red-500 bg-red-950/10' : 'border-white/5 focus:border-[#CCFF00]/50'}`} />
+                  className={perfilIncompleto && !form.numero_control ? inputError : inputNormal} />
               </div>
 
               <div>
-                <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 flex items-center justify-between">
-                  <span>AGE_PARAM</span>
+                <label className="block text-xs font-medium text-gray-500 mb-2 flex items-center justify-between">
+                  <span>Edad</span>
                   {perfilIncompleto && !form.edad && <span className="text-red-500 animate-pulse text-lg leading-none">*</span>}
                 </label>
                 <input type="number" value={form.edad} min="15" max="99"
                   onChange={e => setForm(p => ({ ...p, edad: e.target.value }))}
                   placeholder="20"
-                  className={`w-full bg-[#121212] rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none transition-all uppercase tracking-widest border
-                    ${perfilIncompleto && !form.edad ? 'border-red-500/50 focus:border-red-500 bg-red-950/10' : 'border-white/5 focus:border-[#CCFF00]/50'}`} />
+                  className={perfilIncompleto && !form.edad ? inputError : inputNormal} />
               </div>
             </div>
 
             {/* Campos vendedor */}
             {esVendedor && (
-              <div className="bg-[#121212] p-6 rounded-[2rem] border border-white/5 space-y-6">
-                <p className="font-mono font-bold text-[10px] text-[#CCFF00] uppercase tracking-[0.2em] border-b border-white/5 pb-3">MERCHANT_REGISTRY</p>
+              <div className="bg-gray-100 dark:bg-[#121212] p-6 rounded-[2rem] border border-gray-200 dark:border-white/5 space-y-6">
+                <p className="text-sm font-bold text-green-600 dark:text-[#CCFF00] border-b border-gray-200 dark:border-white/5 pb-3">Datos de Vendedor</p>
                 <div>
-                  <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 flex items-center justify-between">
-                    <span>GOV_ID (CURP)</span>
+                  <label className="block text-xs font-medium text-gray-500 mb-2 flex items-center justify-between">
+                    <span>CURP</span>
                     {perfilIncompleto && !form.curp && <span className="text-red-500 animate-pulse text-lg leading-none">*</span>}
                   </label>
                   <input value={form.curp} maxLength={18}
                     onChange={e => setForm(p => ({ ...p, curp: e.target.value }))}
-                    placeholder="ENTER_CURP"
-                    className={`w-full bg-[#050505] rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none transition-all uppercase tracking-widest border
-                      ${perfilIncompleto && !form.curp ? 'border-red-500/50 focus:border-red-500 bg-red-950/10' : 'border-white/5 focus:border-[#CCFF00]/50'}`} />
+                    placeholder="Ingresa tu CURP"
+                    className={`${perfilIncompleto && !form.curp ? inputError : inputNormal} uppercase`} />
                 </div>
 
                 <div>
-                  <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 flex items-center justify-between">
-                    <span>ACADEMIC_INSTITUTION</span>
+                  <label className="block text-xs font-medium text-gray-500 mb-2 flex items-center justify-between">
+                    <span>Escuela</span>
                     {perfilIncompleto && !form.escuela && <span className="text-red-500 animate-pulse text-lg leading-none">*</span>}
                   </label>
                   <input value={form.escuela}
                     onChange={e => setForm(p => ({ ...p, escuela: e.target.value }))}
-                    placeholder="INSTITUTE_NAME"
-                    className={`w-full bg-[#050505] rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none transition-all uppercase tracking-widest border
-                      ${perfilIncompleto && !form.escuela ? 'border-red-500/50 focus:border-red-500 bg-red-950/10' : 'border-white/5 focus:border-[#CCFF00]/50'}`} />
+                    placeholder="Nombre de tu escuela"
+                    className={perfilIncompleto && !form.escuela ? inputError : inputNormal} />
                 </div>
 
                 <div>
-                  <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-2">FISCAL_ID_RFC (OPTIONAL)</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-2">RFC (Opcional)</label>
                   <input value={form.rfc} onChange={e => setForm(p => ({ ...p, rfc: e.target.value }))}
-                    placeholder="OPTIONAL"
-                    className="w-full bg-[#050505] border border-white/5 rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none focus:border-[#CCFF00]/50 transition-all uppercase tracking-widest" />
+                    placeholder="Opcional"
+                    className={inputNormal} />
                 </div>
 
                 <div>
-                  <label className="block text-[9px] font-mono font-bold text-gray-500 uppercase tracking-[0.2em] mb-2">PAYMENT_GATEWAY</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-2">Método de Pago</label>
                   <select value={form.tipo_pago} onChange={e => setForm(p => ({ ...p, tipo_pago: e.target.value }))}
-                    className="w-full bg-[#050505] border border-white/5 rounded-xl px-4 py-3 text-[11px] font-mono text-white outline-none focus:border-[#CCFF00]/50 transition-all uppercase tracking-widest appearance-none">
-                    <option value="">SELECT_METHOD...</option>
-                    <option value="transferencia">BANK_TRANSFER</option>
-                    <option value="efectivo">CASH_ON_DELIVERY</option>
-                    <option value="paypal">PAYPAL</option>
+                    className={`${inputNormal} appearance-none`}>
+                    <option value="">Seleccionar...</option>
+                    <option value="transferencia">Transferencia Bancaria</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="paypal">PayPal</option>
                   </select>
                 </div>
 
                 {/* Tienda */}
-                <div className="border-t border-white/5 pt-6 mt-2">
-                  <p className="font-mono font-bold text-[10px] text-[#CCFF00] uppercase tracking-[0.2em] mb-6">PUBLIC_STOREFRONT</p>
+                <div className="border-t border-gray-200 dark:border-white/5 pt-6 mt-2">
+                  <p className="text-sm font-bold text-green-600 dark:text-[#CCFF00] mb-6">Mi Tienda</p>
 
                   <div className="flex items-center gap-6 mb-6">
                     <div className="relative w-24 h-24 flex-shrink-0">
                       {logoPreview ? (
                         <>
-                          <div className="w-full h-full bg-white p-2 rounded-[2rem] shadow-[0_0_15px_rgba(204,255,0,0.2)]">
-                            <img src={logoPreview} alt="Logo" className="w-full h-full object-contain rounded-[1.5rem]" />
+                          <div className="w-full h-full bg-white dark:bg-[#121212] rounded-[2rem] shadow-md overflow-hidden">
+                            <img src={logoPreview} alt="Logo" className="w-full h-full object-cover rounded-[2rem]" />
                           </div>
                           <button type="button"
                             onClick={() => { setLogoFile(null); setLogoPreview(usuario?.imagen_tienda || null); if (fileInputRef.current) fileInputRef.current.value = '' }}
-                            className="absolute -top-3 -right-3 bg-[#0A0A0A] border border-[#CCFF00]/50 text-gray-400 hover:text-[#CCFF00] rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-lg transition-colors text-sm">✕</button>
+                            className="absolute -top-3 -right-3 bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-white/10 text-gray-500 hover:text-red-500 rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-md transition-colors text-sm">✕</button>
                         </>
                       ) : (
-                        <div className="w-full h-full border border-white/10 border-dashed bg-[#050505] rounded-[2rem] flex items-center justify-center text-3xl opacity-30">🏪</div>
+                        <div className="w-full h-full border border-gray-300 dark:border-white/10 border-dashed bg-gray-50 dark:bg-[#050505] rounded-[2rem] flex items-center justify-center text-3xl opacity-30">🏪</div>
                       )}
                     </div>
                     <div>
                       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleLogoChange} className="hidden" id="logo-upload" />
-                      <label htmlFor="logo-upload" className="cursor-pointer inline-block text-[9px] font-mono font-bold uppercase tracking-widest bg-[#1a1a1a] hover:bg-[#CCFF00]/10 border border-white/5 hover:border-[#CCFF00]/30 text-white px-5 py-3 rounded-full transition-colors focus:ring">
-                        {logoPreview ? 'UPDATE_IMAGE' : 'UPLOAD_IMAGE'}
+                      <label htmlFor="logo-upload" className="cursor-pointer inline-block text-xs font-medium bg-gray-200 dark:bg-[#1a1a1a] hover:bg-green-50 dark:hover:bg-[#CCFF00]/10 border border-gray-300 dark:border-white/5 hover:border-green-300 dark:hover:border-[#CCFF00]/30 text-gray-700 dark:text-white px-5 py-3 rounded-full transition-colors">
+                        {logoPreview ? 'Cambiar Imagen' : 'Subir Imagen'}
                       </label>
-                      <p className="text-[8px] font-mono uppercase tracking-widest text-gray-500 mt-3">JPG/PNG (MAX 5MB)</p>
+                      <p className="text-[10px] text-gray-400 mt-3">JPG/PNG (máx 5MB)</p>
                     </div>
                   </div>
 
                   <input value={form.nombre_tienda} onChange={e => setForm(p => ({ ...p, nombre_tienda: e.target.value }))}
-                    placeholder="STORE_NAME" className="w-full bg-[#050505] border border-white/5 rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none focus:border-[#CCFF00]/50 mb-4 transition-all uppercase tracking-widest" />
+                    placeholder="Nombre de la tienda" className={`${inputNormal} mb-4`} />
 
                   <textarea value={form.descripcion_tienda} onChange={e => setForm(p => ({ ...p, descripcion_tienda: e.target.value }))}
-                    placeholder="STORE_DESCRIPTION..." rows={3}
-                    className="w-full bg-[#050505] border border-white/5 rounded-xl px-4 py-3 text-[11px] font-mono text-white placeholder-gray-700 outline-none focus:border-[#CCFF00]/50 resize-none transition-all uppercase tracking-widest" />
+                    placeholder="Descripción de la tienda..." rows={3}
+                    className={`${inputNormal} resize-none`} />
                 </div>
               </div>
             )}
 
-            {error   && <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-red-500 bg-red-950/20 border border-red-900/50 rounded-xl px-4 py-4 text-center">{error}</p>}
-            {success && <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#CCFF00] bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded-xl px-4 py-4 text-center">{success}</p>}
+            {error   && <p className="text-sm font-medium text-red-500 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 rounded-xl px-4 py-4 text-center">{error}</p>}
+            {success && <p className="text-sm font-medium text-green-600 dark:text-[#CCFF00] bg-green-50 dark:bg-[#CCFF00]/10 border border-green-200 dark:border-[#CCFF00]/30 rounded-xl px-4 py-4 text-center">{success}</p>}
 
             <button type="submit" disabled={saving}
-              className="w-full bg-[#CCFF00] hover:bg-[#b3ff00] disabled:opacity-30 disabled:hover:bg-[#CCFF00] text-black font-mono font-bold py-4 rounded-full transition-all text-[11px] uppercase tracking-widest shadow-[0_0_20px_rgba(204,255,0,0.2)] mt-8">
-              {saving ? 'UPDATING...' : perfilIncompleto ? 'FINALIZE_REGISTRY' : 'SAVE_PREFERENCES'}
+              className="w-full bg-green-600 dark:bg-[#CCFF00] hover:bg-green-700 dark:hover:bg-[#b3ff00] disabled:opacity-30 text-white dark:text-black font-bold py-4 rounded-full transition-all text-sm shadow-lg mt-8">
+              {saving ? 'Guardando...' : perfilIncompleto ? 'Completar Perfil' : 'Guardar Cambios'}
             </button>
           </form>
         </div>
 
         {/* Links vendedor */}
         {esVendedor && !perfilIncompleto && (
-          <div className="bg-[#0A0A0A] rounded-[2rem] border border-white/5 overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)] mt-10">
+          <div className="bg-gray-50 dark:bg-[#0A0A0A] rounded-[2rem] border border-gray-200 dark:border-white/5 overflow-hidden mt-10">
             <button onClick={() => navigate('/seller')}
-              className="w-full flex items-center justify-between px-8 py-6 hover:bg-[#121212] transition-colors border-b border-white/5 group">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#CCFF00] flex items-center gap-3">
-                 <span className="text-xl">📦</span> MERCHANT_CONSOLE
+              className="w-full flex items-center justify-between px-8 py-6 hover:bg-gray-100 dark:hover:bg-[#121212] transition-colors border-b border-gray-200 dark:border-white/5 group">
+              <span className="text-sm font-bold text-green-600 dark:text-[#CCFF00] flex items-center gap-3">
+                 <span className="text-xl">📦</span> Panel de Vendedor
               </span>
-              <span className="text-gray-600 group-hover:text-[#CCFF00] transition-colors">→</span>
+              <span className="text-gray-400 group-hover:text-green-600 dark:group-hover:text-[#CCFF00] transition-colors">→</span>
             </button>
             <button onClick={() => navigate('/punto-de-venta')}
-              className="w-full flex items-center justify-between px-8 py-6 hover:bg-[#121212] transition-colors group">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#CCFF00] flex items-center gap-3">
-                 <span className="text-xl">🏪</span> POS_TERMINAL
+              className="w-full flex items-center justify-between px-8 py-6 hover:bg-gray-100 dark:hover:bg-[#121212] transition-colors group">
+              <span className="text-sm font-bold text-green-600 dark:text-[#CCFF00] flex items-center gap-3">
+                 <span className="text-xl">🏪</span> Punto de Venta
               </span>
-              <span className="text-gray-600 group-hover:text-[#CCFF00] transition-colors">→</span>
+              <span className="text-gray-400 group-hover:text-green-600 dark:group-hover:text-[#CCFF00] transition-colors">→</span>
             </button>
           </div>
         )}
 
         {usuario?.es_admin && (
           <button onClick={() => navigate('/admin')}
-            className="w-full bg-red-950/10 border border-red-900/30 rounded-full px-8 py-5 flex items-center justify-between hover:bg-red-950/30 transition-colors mt-10 group shadow-sm">
-            <span className="text-[11px] font-mono font-bold text-red-500 uppercase tracking-widest">⚙️ SYSADMIN_PANEL</span>
-            <span className="text-red-800 group-hover:text-red-500 transition-colors">→</span>
+            className="w-full bg-red-50 dark:bg-red-950/10 border border-red-200 dark:border-red-900/30 rounded-full px-8 py-5 flex items-center justify-between hover:bg-red-100 dark:hover:bg-red-950/30 transition-colors mt-10 group">
+            <span className="text-sm font-bold text-red-500">⚙️ Panel de Administrador</span>
+            <span className="text-red-300 group-hover:text-red-500 transition-colors">→</span>
           </button>
         )}
 
         <button onClick={handleLogout}
-          className="w-full border border-white/10 hover:border-red-500/50 hover:bg-red-500/5 text-gray-500 hover:text-red-500 font-mono font-bold py-5 rounded-full text-[11px] tracking-widest uppercase transition-all mt-16 bg-[#0A0A0A] shadow-sm">
-          TERMINATE_SESSION
+          className="w-full border border-gray-200 dark:border-white/10 hover:border-red-300 dark:hover:border-red-500/50 hover:bg-red-50 dark:hover:bg-red-500/5 text-gray-400 hover:text-red-500 font-bold py-5 rounded-full text-sm transition-all mt-16 bg-gray-50 dark:bg-[#0A0A0A]">
+          Cerrar Sesión
         </button>
       </div>
 
