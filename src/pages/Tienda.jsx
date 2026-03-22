@@ -72,9 +72,9 @@ export default function Tienda() {
           )}
         </div>
         <div className="px-6 pb-6 -mt-12 relative z-20 max-w-3xl mx-auto">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-[2rem] border-2 border-[#121212] flex items-center justify-center text-4xl mb-4 overflow-hidden relative shadow-[0_0_30px_rgba(204,255,0,0.1)] p-3">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-[2rem] border-2 border-[#121212] flex items-center justify-center text-4xl mb-4 overflow-hidden relative shadow-[0_0_30px_rgba(204,255,0,0.1)] bg-[#121212]">
             {store?.imagen_tienda ? (
-              <img src={store.imagen_tienda} alt="logo" className="w-full h-full object-contain" />
+              <img src={store.imagen_tienda} alt="logo" className="w-full h-full object-cover" />
             ) : (
               <span className="opacity-50">🏪</span>
             )}
