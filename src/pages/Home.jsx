@@ -69,7 +69,7 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-[#050505] pb-24 text-gray-900 dark:text-white font-inter transition-colors relative">
       <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-green-500/10 dark:from-[#CCFF00]/10 to-transparent pointer-events-none z-0"></div>
       
-      <div className="relative z-10 block">
+      <div className="relative z-50 block">
         <TopNav />
       </div>
 
