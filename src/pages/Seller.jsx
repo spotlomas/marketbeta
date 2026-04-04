@@ -5,6 +5,8 @@ import { useApp } from '../context/AppContext'
 import TopNav from '../components/TopNav'
 import BottomNav from '../components/BottomNav'
 import VendorPanel from '../components/VendorPanel'
+import DeliverySettings from '../components/DeliverySettings'
+import { Camera, CheckCircle, Clock, DollarSign, ListOrdered, ClipboardList } from 'lucide-react'
 
 export default function Seller() {
   const { usuario, session } = useApp()
@@ -42,15 +44,19 @@ export default function Seller() {
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">Panel de Vendedor</h1>
           <Link to="/punto-de-venta"
             className="bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black hover:bg-green-700 dark:hover:bg-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg flex items-center gap-2">
-            📷 Punto de Venta
+            <Camera className="w-4 h-4" /> Punto de Venta
           </Link>
         </div>
 
         {/* Pestañas */}
-        <div className="flex gap-2 bg-gray-100 dark:bg-[#121212] p-2 rounded-full w-fit mb-8 border border-gray-200 dark:border-white/5">
-          {[{ key: 'products', label: 'Mis Productos' }, { key: 'orders', label: 'Mis Ventas' }].map(t => (
+        <div className="flex gap-2 bg-gray-100 dark:bg-[#121212] p-2 rounded-full w-full sm:w-fit mb-8 border border-gray-200 dark:border-white/5 overflow-x-auto scrollbar-hide">
+          {[
+            { key: 'products', label: 'Mis Productos' }, 
+            { key: 'orders', label: 'Mis Ventas' },
+            { key: 'delivery', label: 'Lugares' }
+          ].map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all flex-shrink-0
                 ${tab === t.key ? 'bg-white dark:bg-white text-black font-bold shadow-md' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}>
               {t.label}
             </button>
@@ -58,14 +64,15 @@ export default function Seller() {
         </div>
 
         {tab === 'products' && <VendorPanel />}
+        {tab === 'delivery' && <DeliverySettings session={session} />}
 
         {tab === 'orders' && (
           <div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <StatCard label="Entregados" value={ventas.length} icon="✓" />
-              <StatCard label="Pendientes" value={pendientes.length} icon="⏳" />
-              <StatCard label="Ingresos" value={`$${totalIngresos.toFixed(2)}`} icon="💰" />
-              <StatCard label="Total Pedidos" value={orders.length} icon="📋" />
+              <StatCard label="Entregados" value={ventas.length} icon={<CheckCircle className="w-6 h-6 text-green-500" />} />
+              <StatCard label="Pendientes" value={pendientes.length} icon={<Clock className="w-6 h-6 text-orange-500" />} />
+              <StatCard label="Ingresos" value={`$${totalIngresos.toFixed(2)}`} icon={<DollarSign className="w-6 h-6 text-[#CCFF00]" />} />
+              <StatCard label="Total Pedidos" value={orders.length} icon={<ListOrdered className="w-6 h-6 text-blue-500" />} />
             </div>
 
             {loadingOrders ? (
@@ -74,7 +81,7 @@ export default function Seller() {
               </div>
             ) : orders.length === 0 ? (
               <div className="text-center py-20 bg-gray-50 dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/5 rounded-3xl">
-                <p className="text-4xl mb-4 opacity-30">📋</p>
+                <div className="mb-4 flex justify-center"><ClipboardList className="w-12 h-12 text-gray-300 dark:text-gray-700" /></div>
                 <p className="text-sm text-gray-500">Aún no tienes ventas registradas.</p>
               </div>
             ) : (
@@ -102,7 +109,7 @@ export default function Seller() {
 function StatCard({ label, value, icon }) {
   return (
     <div className="bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/10 p-5 relative overflow-hidden group hover:border-green-400 dark:hover:border-[#CCFF00]/50 transition-colors">
-      <p className="text-xl text-gray-400 dark:text-gray-600 mb-2">{icon}</p>
+      <div className="mb-3">{icon}</div>
       <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
       <p className="text-xs text-gray-500 mt-2">{label}</p>
     </div>

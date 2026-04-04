@@ -7,6 +7,7 @@ import BottomNav from '../components/BottomNav'
 import ProductCard from '../components/ProductCard'
 import StoreCard from '../components/StoreCard'
 import ProductList from '../components/ProductList'
+import { Search, ArrowRight } from 'lucide-react'
 
 export default function Home() {
   const { usuario } = useApp()
@@ -82,7 +83,7 @@ export default function Home() {
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">¿Qué se te antoja hoy?</p>
           <Link to="/buscar"
             className="mt-4 flex items-center gap-3 bg-gray-100 dark:bg-[#121212]/80 backdrop-blur-md rounded-2xl px-5 py-4 text-sm text-gray-400 dark:text-gray-500 hover:border-green-500/50 dark:hover:border-[#CCFF00]/50 transition-colors group border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-            <span className="text-gray-400 group-hover:text-green-600 dark:group-hover:text-[#CCFF00] transition-colors text-lg">🔍</span>
+            <Search className="w-5 h-5 text-gray-400 group-hover:text-green-600 dark:group-hover:text-[#CCFF00] transition-colors" />
             <span className="font-medium group-hover:text-gray-700 dark:group-hover:text-white transition-colors">Buscar productos o tiendas...</span>
           </Link>
         </div>
@@ -133,7 +134,7 @@ export default function Home() {
                 {featured.length > 3 && (
                   <button onClick={() => setShowAllFeatured(true)}
                     className="flex-shrink-0 snap-center w-36 min-h-[160px] bg-gray-50 dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/5 rounded-3xl flex flex-col items-center justify-center gap-3 hover:border-green-400 dark:hover:border-[#CCFF00]/40 transition-colors group">
-                    <span className="text-xl text-gray-400 group-hover:text-green-600 dark:group-hover:text-[#CCFF00] group-hover:translate-x-1 transition-all">→</span>
+                    <ArrowRight className="w-6 h-6 text-gray-400 group-hover:text-green-600 dark:group-hover:text-[#CCFF00] group-hover:translate-x-1 transition-all" />
                     <span className="text-xs font-medium text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white text-center leading-relaxed">Ver<br/>más</span>
                   </button>
                 )}

@@ -1,16 +1,17 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import { Home, Search, ShoppingCart, Receipt, User } from 'lucide-react'
 
 export default function BottomNav() {
   const { cartCount, usuario } = useApp()
   const { pathname } = useLocation()
 
   const tabs = [
-    { to: '/',            icon: '🏠', label: 'Inicio'    },
-    { to: '/buscar',      icon: '🔍', label: 'Buscar'    },
-    { to: '/cart',        icon: '🛒', label: 'Carrito', badge: cartCount },
-    { to: '/mis-compras', icon: '🧾', label: 'Órdenes'   },
-    { to: '/perfil',      icon: '👤', label: 'Perfil'    },
+    { to: '/',            icon: <Home className="w-5 h-5" />, label: 'Inicio'    },
+    { to: '/buscar',      icon: <Search className="w-5 h-5" />, label: 'Buscar'    },
+    { to: '/cart',        icon: <ShoppingCart className="w-5 h-5" />, label: 'Carrito', badge: cartCount },
+    { to: '/mis-compras', icon: <Receipt className="w-5 h-5" />, label: 'Órdenes'   },
+    { to: '/perfil',      icon: <User className="w-5 h-5" />, label: 'Perfil'    },
   ]
 
   return (

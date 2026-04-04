@@ -5,12 +5,14 @@ import { useApp } from '../context/AppContext'
 import TopNav from '../components/TopNav'
 import BottomNav from '../components/BottomNav'
 import StripeCheckout from '../components/StripeCheckout'
+import { ShoppingCart, CheckCircle, Package, ArrowRight, MapPin, Clock } from 'lucide-react'
 
 const COMMISSION = 0.06
 
 export default function Cart() {
   const { cart, cartTotal, updateQuantity, removeFromCart, clearCart, session } = useApp()
   const [showCheckout, setShowCheckout] = useState(false)
+  const [showDeliveryConfirm, setShowDeliveryConfirm] = useState(false)
   const [success, setSuccess]           = useState(false)
   const [orders, setOrders]             = useState([])
 
@@ -81,8 +83,8 @@ export default function Cart() {
       <div className="min-h-screen bg-white dark:bg-[#050505] text-gray-900 dark:text-white font-inter transition-colors">
         <TopNav />
         <div className="max-w-lg mx-auto px-4 py-16 pb-28">
-          <div className="text-center mb-10">
-            <div className="text-6xl mb-6 animate-bounce">✅</div>
+          <div className="text-center mb-10 text-green-600 dark:text-[#CCFF00]">
+            <CheckCircle className="w-16 h-16 mx-auto mb-6" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">¡Compra Exitosa!</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">Muestra estos códigos QR al vendedor para recoger tu pedido.</p>
           </div>
@@ -120,7 +122,7 @@ export default function Cart() {
 
         {cart.length === 0 ? (
           <div className="text-center py-24 bg-gray-50 dark:bg-[#0A0A0A] rounded-3xl border border-gray-200 dark:border-white/5">
-            <p className="text-5xl mb-6 opacity-30">🛒</p>
+            <div className="flex justify-center mb-6"><ShoppingCart className="w-16 h-16 text-gray-300 dark:text-gray-700" /></div>
             <p className="text-sm text-gray-500 mb-8">Tu carrito está vacío</p>
             <Link to="/" className="bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black hover:bg-green-700 dark:hover:bg-white transition-all rounded-full px-8 py-3 font-bold text-sm inline-block shadow-md">
               Explorar Productos
@@ -134,7 +136,7 @@ export default function Cart() {
                   <div className="w-full sm:w-28 h-32 sm:h-28 rounded-2xl overflow-hidden bg-gray-100 dark:bg-[#121212] flex-shrink-0 relative border border-gray-200 dark:border-white/5">
                     {product.image_url
                       ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-3xl opacity-20">📦</div>
+                      : <div className="w-full h-full flex items-center justify-center text-gray-300 dark:text-gray-700"><Package className="w-8 h-8" /></div>
                     }
                   </div>
                   <div className="flex-1 min-w-0 w-full py-1">
@@ -181,7 +183,7 @@ export default function Cart() {
                 <span className="text-sm text-gray-500 mb-1">Total</span>
                 <span className="text-2xl font-bold text-gray-900 dark:text-white">${cartTotal.toFixed(2)}</span>
               </div>
-              <button onClick={() => setShowCheckout(true)}
+              <button onClick={() => setShowDeliveryConfirm(true)}
                 className="w-full mt-8 bg-green-600 dark:bg-[#CCFF00] hover:bg-green-700 dark:hover:bg-[#b3ff00] text-white dark:text-black font-bold py-4 rounded-full text-sm transition-all shadow-lg active:scale-[0.98]">
                 Pagar
               </button>
@@ -204,6 +206,44 @@ export default function Cart() {
           onClose={() => setShowCheckout(false)}
         />
       )}
+
+      {showDeliveryConfirm && (
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-[70] flex items-end sm:items-center justify-center px-0 sm:px-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-6 sm:p-8 flex flex-col shadow-xl">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Acuerdo de Entrega</h2>
+            <p className="text-sm text-gray-500 mb-6">Por favor, revisa y acepta los términos de entrega del vendedor dentro del entorno universitario.</p>
+            
+            <div className="bg-green-50 dark:bg-[#CCFF00]/10 border border-green-200 dark:border-[#CCFF00]/20 rounded-2xl p-5 mb-8">
+              <div className="flex items-start gap-4 mb-4">
+                <MapPin className="w-5 h-5 text-green-600 dark:text-[#CCFF00] shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold text-gray-900 dark:text-white text-sm">Biblioteca Central</p>
+                  <p className="text-xs text-green-600 dark:text-[#CCFF00] font-medium mt-1 uppercase tracking-wide">Punto de Recolección</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <Clock className="w-5 h-5 text-green-600 dark:text-[#CCFF00] shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold text-gray-900 dark:text-white text-sm">14:00 - 15:30 HRS</p>
+                  <p className="text-xs text-green-600 dark:text-[#CCFF00] font-medium mt-1 uppercase tracking-wide">Horario de Disponibilidad</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <button onClick={() => {
+                setShowDeliveryConfirm(false)
+                setShowCheckout(true)
+              }} className="w-full flex items-center justify-center gap-2 bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black py-4 rounded-full font-bold text-sm transition-all shadow-lg hover:bg-green-700 dark:hover:bg-white active:scale-[0.98]">
+                Estoy de acuerdo y Proceder al Pago <ArrowRight className="w-4 h-4" />
+              </button>
+              <button onClick={() => setShowDeliveryConfirm(false)} className="w-full text-center py-3 text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -217,7 +257,7 @@ function OrderQRCard({ order }) {
         <div className="w-14 h-14 bg-gray-100 dark:bg-[#121212] rounded-2xl flex items-center justify-center border border-gray-200 dark:border-white/5 overflow-hidden">
           {order.products?.image_url
             ? <img src={order.products.image_url} alt={order.products.name} className="w-full h-full object-cover" />
-            : <span className="text-2xl opacity-20">📦</span>
+            : <Package className="w-6 h-6 text-gray-300 dark:text-gray-700" />
           }
         </div>
         <div className="flex-1">
