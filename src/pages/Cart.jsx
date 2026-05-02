@@ -235,7 +235,7 @@ export default function Cart() {
             
             {/* Header (Fixed) */}
             <div className="relative flex-none px-6 pt-8 pb-4 bg-white dark:bg-[#050505] border-b border-gray-100 dark:border-white/5">
-              <div className="absolute top-2 left-6 bg-black/5 dark:bg-white/10 text-[7px] px-1.5 py-0.5 rounded font-black opacity-50 uppercase tracking-widest">v0.2.2 Live</div>
+              <div className="absolute top-2 left-6 bg-black/5 dark:bg-white/10 text-[7px] px-1.5 py-0.5 rounded font-black opacity-50 uppercase tracking-widest">v0.2.3 Live</div>
               <h2 className="text-2xl font-black text-gray-900 dark:text-white pr-10">Acuerdo de Entrega</h2>
               <button 
                 onClick={() => setShowDeliveryConfirm(false)} 

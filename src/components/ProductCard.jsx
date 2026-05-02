@@ -167,7 +167,7 @@ function ProductModal({ product, onClose }) {
             <div className="w-full h-full flex items-center justify-center text-6xl opacity-20">🍔</div>
           )}
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white dark:from-[#050505] to-transparent pointer-events-none"></div>
-          <div className="absolute top-4 left-4 z-50 bg-black/40 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter border border-white/10">v0.2.2 Live</div>
+          <div className="absolute top-4 left-4 z-50 bg-black/40 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-full font-black uppercase tracking-tighter border border-white/10">v0.2.3 Live</div>
           <button onClick={onClose} className="absolute top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md shadow-md active:scale-95 transition-transform">
             ✕
           </button>
