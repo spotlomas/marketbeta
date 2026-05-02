@@ -208,11 +208,12 @@ export default function Cart() {
       )}
 
       {showDeliveryConfirm && (
-        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-[70] flex items-end sm:items-center justify-center px-0 sm:px-4 animate-in fade-in duration-200" onClick={() => setShowDeliveryConfirm(false)}>
-          <div 
-            className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full max-w-lg rounded-t-3xl sm:rounded-3xl flex flex-col shadow-xl max-h-[92dvh] sm:max-h-[90vh] overflow-hidden"
-            onClick={e => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-[70] overflow-y-auto" onClick={() => setShowDeliveryConfirm(false)}>
+          <div className="min-h-full flex items-end sm:items-center justify-center p-4 pb-32 sm:p-8">
+            <div 
+              className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full max-w-lg rounded-[2.5rem] flex flex-col shadow-xl overflow-hidden animate-in slide-in-from-bottom duration-300"
+              onClick={e => e.stopPropagation()}
+            >
             <div className="p-6 sm:p-8 overflow-y-auto">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Acuerdo de Entrega</h2>
               <p className="text-sm text-gray-500 mb-6">Por favor, revisa y acepta los términos de entrega del vendedor dentro del entorno universitario.</p>
@@ -248,7 +249,8 @@ export default function Cart() {
             </div>
           </div>
         </div>
-      )}
+      </div>
+    )}
     </div>
   )
 }

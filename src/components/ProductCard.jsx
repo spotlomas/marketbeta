@@ -140,10 +140,10 @@ function ProductModal({ product, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
-      <div className="min-h-full flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-md overflow-y-auto scroll-smooth" onClick={onClose}>
+      <div className="min-h-full flex items-end sm:items-center justify-center p-4 pb-32 sm:p-8" onClick={e => e.stopPropagation()}>
         <div 
-          className="bg-white dark:bg-[#050505] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-300"
+          className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-300"
         >
           {/* Header Image */}
           <div className="relative">
