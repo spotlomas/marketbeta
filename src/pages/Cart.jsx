@@ -17,17 +17,13 @@ export default function Cart() {
   const [orders, setOrders]             = useState([])
 
   useEffect(() => {
-    const nav = document.getElementById('bottom-nav-bar');
     if (showDeliveryConfirm || showCheckout) {
-      if (nav) nav.style.display = 'none';
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
     } else {
-      if (nav) nav.style.display = '';
-      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
     }
     return () => {
-      if (nav) nav.style.display = '';
-      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
     }
   }, [showDeliveryConfirm, showCheckout])
 
@@ -225,7 +221,7 @@ export default function Cart() {
       {showDeliveryConfirm && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setShowDeliveryConfirm(false)}>
           <div 
-            className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-lg rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 max-h-[95vh] sm:max-h-[90vh]"
+            className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-lg rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 h-[80vh] sm:h-[80vh]"
             onClick={e => e.stopPropagation()}
           >
             <div className="p-6 sm:p-8 overflow-y-auto scroll-smooth flex-1 relative w-full">

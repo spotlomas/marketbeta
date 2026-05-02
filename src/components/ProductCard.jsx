@@ -124,14 +124,10 @@ function ProductModal({ product, onClose }) {
     }
     fetchRelated()
 
-    // Hide bottom nav and disable body scroll
-    const nav = document.getElementById('bottom-nav-bar');
-    if (nav) nav.style.display = 'none';
-    document.body.style.overflow = 'hidden';
-
+    // Toggle body class directly
+    document.body.classList.add('modal-open');
     return () => {
-      if (nav) nav.style.display = '';
-      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
     }
   }, [product.id, product.seller_id])
 
@@ -152,7 +148,7 @@ function ProductModal({ product, onClose }) {
   return (
     <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-xl flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
       <div 
-        className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 max-h-[95vh] sm:max-h-[90vh] overflow-hidden"
+        className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 h-[80vh] sm:h-[80vh] overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex-1 overflow-y-auto scroll-smooth w-full relative">
