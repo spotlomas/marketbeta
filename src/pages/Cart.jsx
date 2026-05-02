@@ -219,44 +219,63 @@ export default function Cart() {
       )}
 
       {showDeliveryConfirm && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setShowDeliveryConfirm(false)}>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-end sm:items-center justify-center animate-in fade-in duration-200" onClick={() => setShowDeliveryConfirm(false)}>
+          
+          {/* Modal Container */}
           <div 
-            className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-lg rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 h-[80vh] sm:h-[80vh]"
+            className="bg-white dark:bg-[#050505] w-full sm:max-w-md h-[90vh] rounded-t-[2.5rem] sm:rounded-[2.5rem] flex flex-col shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom duration-300"
             onClick={e => e.stopPropagation()}
           >
-            <div className="p-6 sm:p-8 overflow-y-auto scroll-smooth flex-1 relative w-full">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Acuerdo de Entrega</h2>
-              <p className="text-sm text-gray-500 mb-6">Por favor, revisa y acepta los términos de entrega del vendedor dentro del entorno universitario.</p>
+            
+            {/* Header (Fixed) */}
+            <div className="relative flex-none px-6 pt-8 pb-4 bg-white dark:bg-[#050505] border-b border-gray-100 dark:border-white/5">
+              <h2 className="text-2xl font-black text-gray-900 dark:text-white pr-10">Acuerdo de Entrega</h2>
+              <button 
+                onClick={() => setShowDeliveryConfirm(false)} 
+                className="absolute top-7 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white active:scale-95 transition-transform"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Scrollable Internal Content */}
+            <div className="flex-1 overflow-y-auto w-full px-6 py-6 pb-48">
+              <p className="text-sm text-gray-500 mb-8 font-medium leading-relaxed">Por favor, revisa y acepta los términos de entrega del vendedor dentro del entorno universitario.</p>
               
-              <div className="bg-green-50 dark:bg-[#CCFF00]/10 border border-green-200 dark:border-[#CCFF00]/20 rounded-2xl p-5 mb-8">
-                <div className="flex items-start gap-4 mb-4">
-                  <MapPin className="w-5 h-5 text-green-600 dark:text-[#CCFF00] shrink-0 mt-0.5" />
+              <div className="bg-green-50 dark:bg-[#CCFF00]/10 border border-green-200 dark:border-[#CCFF00]/20 rounded-[2rem] p-6 mb-8 shadow-sm">
+                <div className="flex items-start gap-4 mb-6">
+                  <MapPin className="w-6 h-6 text-green-600 dark:text-[#CCFF00] shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-sm">Biblioteca Central</p>
-                    <p className="text-xs text-green-600 dark:text-[#CCFF00] font-medium mt-1 uppercase tracking-wide">Punto de Recolección</p>
+                    <p className="font-black text-gray-900 dark:text-white text-base">Biblioteca Central</p>
+                    <p className="text-[10px] text-green-600 dark:text-[#CCFF00] font-black mt-1 uppercase tracking-widest opacity-80">Punto de Recolección</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <Clock className="w-5 h-5 text-green-600 dark:text-[#CCFF00] shrink-0 mt-0.5" />
+                  <Clock className="w-6 h-6 text-green-600 dark:text-[#CCFF00] shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold text-gray-900 dark:text-white text-sm">14:00 - 15:30 HRS</p>
-                    <p className="text-xs text-green-600 dark:text-[#CCFF00] font-medium mt-1 uppercase tracking-wide">Horario de Disponibilidad</p>
+                    <p className="font-black text-gray-900 dark:text-white text-base">14:00 - 15:30 HRS</p>
+                    <p className="text-[10px] text-green-600 dark:text-[#CCFF00] font-black mt-1 uppercase tracking-widest opacity-80">Horario Disponible</p>
                   </div>
                 </div>
               </div>
-
-              <div className="flex flex-col gap-3 pb-8">
-                <button onClick={() => {
-                  setShowDeliveryConfirm(false)
-                  setShowCheckout(true)
-                }} className="w-full flex items-center justify-center gap-2 bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black py-4 rounded-full font-bold text-sm transition-all shadow-lg hover:bg-green-700 dark:hover:bg-white active:scale-[0.98]">
-                  Estoy de acuerdo y Proceder al Pago <ArrowRight className="w-4 h-4" />
-                </button>
-                <button onClick={() => setShowDeliveryConfirm(false)} className="w-full text-center py-3 text-sm font-medium text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
-                  Cancelar
-                </button>
-              </div>
             </div>
+
+            {/* Fixed Sticky Action Buttons */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/10 z-20 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.05)] flex flex-col gap-3">
+              <button onClick={() => {
+                setShowDeliveryConfirm(false)
+                setShowCheckout(true)
+              }} className="w-full flex items-center justify-center gap-2 bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black py-4 rounded-[2rem] font-black text-sm transition-all shadow-lg hover:brightness-110 active:scale-[0.98]">
+                Proceder al Pago <ArrowRight className="w-4 h-4 ml-1" />
+              </button>
+              <button 
+                onClick={() => setShowDeliveryConfirm(false)} 
+                className="w-full text-center py-3 text-sm font-bold text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors active:scale-95"
+              >
+                Cancelar
+              </button>
+            </div>
+
           </div>
         </div>
       )}
