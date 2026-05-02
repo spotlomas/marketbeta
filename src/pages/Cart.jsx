@@ -17,13 +17,20 @@ export default function Cart() {
   const [orders, setOrders]             = useState([])
 
   useEffect(() => {
+    const nav = document.getElementById('bottom-nav-bar');
     if (showDeliveryConfirm || showCheckout) {
-      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100vh';
+      if (nav) nav.style.display = 'none';
     } else {
-      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      if (nav) nav.style.display = '';
     }
     return () => {
-      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      if (nav) nav.style.display = '';
     }
   }, [showDeliveryConfirm, showCheckout])
 

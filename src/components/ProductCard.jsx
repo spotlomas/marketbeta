@@ -124,10 +124,18 @@ function ProductModal({ product, onClose }) {
     }
     fetchRelated()
 
-    // Toggle body class directly
-    document.body.classList.add('modal-open');
+    // Direct DOM manipulation for absolute reliability on mobile
+    console.log("UX Bridge: ProductModal Active V3");
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+    
+    const nav = document.getElementById('bottom-nav-bar');
+    if (nav) nav.style.display = 'none';
+
     return () => {
-      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      if (nav) nav.style.display = '';
     }
   }, [product.id, product.seller_id])
 
