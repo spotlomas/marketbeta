@@ -140,82 +140,100 @@ function ProductModal({ product, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center animate-in fade-in duration-200" onClick={onClose}>
-      <div 
-        className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden flex flex-col max-h-[90vh] shadow-xl" 
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="relative">
-          <div className="w-full h-56 bg-gray-100 dark:bg-[#121212] relative border-b border-gray-200 dark:border-white/10">
-            {product.image_url
-              ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-              : <div className="w-full h-full flex items-center justify-center text-6xl opacity-20">🍔</div>
-            }
-            <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#050505] to-transparent"></div>
-          </div>
-          <button onClick={onClose} 
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-gray-200 dark:border-white/20 flex items-center justify-center text-gray-600 dark:text-white text-xs shadow-sm active:scale-95 transition-all">
-            ✕
-          </button>
-        </div>
-
-        <div className="p-6 flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="flex justify-between items-start gap-4 mb-2">
-            <h2 className="text-base font-bold text-gray-900 dark:text-white leading-tight">{product.name}</h2>
-            <span className="text-sm font-bold text-gray-900 dark:text-white bg-gray-100 dark:bg-white/5 px-3 py-1 rounded-lg border border-gray-200 dark:border-white/10">${Number(product.price).toFixed(2)}</span>
-          </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">{product.description}</p>
-
-          <div className="flex items-center justify-center gap-8 py-6 border-y border-gray-200 dark:border-white/5 my-2">
-            <button onClick={handleRemove} disabled={quantity === 0}
-              className="w-14 h-14 rounded-full bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white flex items-center justify-center text-3xl active:translate-y-1 hover:border-gray-300 dark:hover:border-white/30 disabled:opacity-40 disabled:active:translate-y-0 transition-all">
-              −
-            </button>
-            <span className="text-2xl font-bold text-green-600 dark:text-[#CCFF00] w-8 text-center">{quantity}</span>
-            <button onClick={handleAdd}
-              className="w-14 h-14 rounded-full bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black flex items-center justify-center text-3xl shadow-lg active:translate-y-1 hover:bg-green-700 dark:hover:bg-white transition-all">
-              +
-            </button>
-          </div>
-
-          <h3 className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-4 mt-6">Más del vendedor</h3>
-          
-          {loadingRelated ? (
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-6 px-6">
-              {[1, 2].map(i => (
-                <div key={i} className="w-32 h-40 bg-gray-100 dark:bg-[#121212] border border-gray-200 dark:border-white/5 rounded-3xl flex-shrink-0 animate-pulse"></div>
-              ))}
+    <div className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-sm overflow-y-auto" onClick={onClose}>
+      <div className="min-h-full flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={e => e.stopPropagation()}>
+        <div 
+          className="bg-white dark:bg-[#050505] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-300"
+        >
+          {/* Header Image */}
+          <div className="relative">
+            <div className="w-full h-64 sm:h-72 bg-gray-100 dark:bg-[#121212] relative">
+              {product.image_url
+                ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+                : <div className="w-full h-full flex items-center justify-center text-6xl opacity-20">🍔</div>
+              }
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white dark:from-[#050505] to-transparent"></div>
             </div>
-          ) : related.length > 0 ? (
-            <div className="flex gap-3 overflow-x-auto pb-6 scrollbar-hide -mx-6 px-6 snap-x">
-              {related.map(rel => (
-                <div key={rel.id} className="snap-center pointer-events-none flex-shrink-0">
-                  <div className="w-28 bg-gray-50 dark:bg-[#0a0a0a] rounded-2xl border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group pb-2">
-                    <div className="aspect-square bg-gray-100 dark:bg-[#121212] relative border-b border-gray-200 dark:border-white/5">
-                       {rel.image_url ? <img src={rel.image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center opacity-20 text-xl">🍔</div>}
-                    </div>
-                    <div className="px-2 pt-3 text-center">
-                      <p className="text-[10px] font-bold text-gray-900 dark:text-white truncate">{rel.name}</p>
-                      <p className="text-[10px] text-green-600 dark:text-[#CCFF00] font-medium mt-1">${Number(rel.price).toFixed(2)}</p>
-                    </div>
-                  </div>
+            <button onClick={onClose} 
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-gray-200 dark:border-white/20 flex items-center justify-center text-gray-900 dark:text-white text-lg shadow-lg active:scale-90 transition-all z-10">
+              ✕
+            </button>
+          </div>
+
+          {/* Content Area */}
+          <div className="px-8 pb-10 -mt-10 relative z-10">
+            <div className="flex justify-between items-start gap-4 mb-4">
+              <div>
+                <h2 className="text-xl font-black text-gray-900 dark:text-white leading-tight tracking-tight uppercase">{product.name}</h2>
+                <div className="mt-2 inline-flex items-center bg-green-50 dark:bg-[#CCFF00]/10 border border-green-200 dark:border-[#CCFF00]/20 px-3 py-1 rounded-full text-green-600 dark:text-[#CCFF00] font-bold text-sm tracking-wide">
+                  ${Number(product.price).toFixed(2)}
                 </div>
-              ))}
+              </div>
             </div>
-          ) : (
-            <p className="text-xs text-gray-400 dark:text-gray-500 pb-6">Sin más productos.</p>
-          )}
-        </div>
+            
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-10 leading-relaxed font-medium">{product.description}</p>
 
-        {quantity > 0 && (
-          <div className="p-4 bg-gray-50 dark:bg-[#0a0a0a] border-t border-gray-200 dark:border-white/10">
-            <button onClick={onClose}
-              className="w-full bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black font-bold text-sm py-4 rounded-full shadow-lg active:translate-y-1 transition-all flex items-center justify-between px-6">
-              <span>Agregar {quantity}</span>
-              <span>Listo →</span>
-            </button>
+            <div className="flex items-center justify-between gap-6 p-2 bg-gray-50 dark:bg-white/5 rounded-full mb-10 border border-gray-100 dark:border-white/5">
+              <button onClick={handleRemove} disabled={quantity === 0}
+                className="w-14 h-14 rounded-full bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white flex items-center justify-center text-3xl shadow-sm hover:border-gray-400 dark:hover:border-white/30 disabled:opacity-30 active:scale-95 transition-all">
+                −
+              </button>
+              <div className="flex flex-col items-center">
+                <span className="text-3xl font-black text-green-600 dark:text-[#CCFF00]">{quantity}</span>
+                <span className="text-[10px] uppercase tracking-widest font-bold opacity-40">Cantidad</span>
+              </div>
+              <button onClick={handleAdd}
+                className="w-14 h-14 rounded-full bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black flex items-center justify-center text-3xl shadow-xl active:scale-95 hover:brightness-110 transition-all">
+                +
+              </button>
+            </div>
+
+            {/* Related Products Section */}
+            <div className="border-t border-gray-100 dark:border-white/5 pt-8">
+              <h3 className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-[0.2em] mb-6">Más de este vendedor</h3>
+              
+              {loadingRelated ? (
+                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                  {[1, 2].map(i => (
+                    <div key={i} className="w-32 h-44 bg-gray-100 dark:bg-white/5 rounded-[2rem] flex-shrink-0 animate-pulse"></div>
+                  ))}
+                </div>
+              ) : related.length > 0 ? (
+                <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide -mx-8 px-8 snap-x">
+                  {related.map(rel => (
+                    <div key={rel.id} className="snap-center flex-shrink-0">
+                      <div className="w-32 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group pb-4 active:scale-95 transition-transform cursor-pointer">
+                        <div className="aspect-square bg-gray-200 dark:bg-[#121212] relative">
+                           {rel.image_url ? <img src={rel.image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center opacity-20 text-2xl">🍔</div>}
+                        </div>
+                        <div className="px-3 pt-4 text-center">
+                          <p className="text-[11px] font-bold text-gray-900 dark:text-white truncate uppercase tracking-tight">{rel.name}</p>
+                          <p className="text-[11px] text-green-600 dark:text-[#CCFF00] font-black mt-1">${Number(rel.price).toFixed(2)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-gray-400 dark:text-gray-500 pb-4">No hay más productos disponibles.</p>
+              )}
+            </div>
+
+            {/* Final Action Button (Inside scroll) */}
+            {quantity > 0 && (
+              <div className="mt-8 pt-8 border-t border-gray-100 dark:border-white/5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <button onClick={onClose}
+                  className="w-full bg-green-600 dark:bg-[#CCFF00] hover:brightness-110 text-white dark:text-black font-black text-sm py-5 rounded-[2rem] shadow-[0_20px_50px_rgba(204,255,0,0.3)] dark:shadow-[0_20px_50px_rgba(204,255,0,0.15)] active:scale-[0.98] transition-all flex items-center justify-between px-10 group">
+                  <span className="uppercase tracking-widest text-base">Listo</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs opacity-60 font-bold uppercase tracking-widest">{quantity} Producto(s)</span>
+                    <span className="text-xl group-hover:translate-x-2 transition-transform">→</span>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )
