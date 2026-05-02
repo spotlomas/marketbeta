@@ -4,78 +4,154 @@ import { supabase } from '../services/supabaseClient'
 const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
-  const [session, setSession]   = useState(undefined) // undefined = cargando
-  const [usuario, setUsuario]   = useState(null)
-  const [cart, setCart]         = useState([])         // { product, quantity }[]
-  const [loading, setLoading]   = useState(true)
+  const [session, setSession]           = useState(undefined)
+  const [usuario, setUsuario]           = useState(null)
+  const [cart, setCart]                 = useState([])
+  const [loading, setLoading]           = useState(true)
+  const [perfilIncompleto, setPerfilIncompleto] = useState(false)
+  const [theme, setTheme]               = useState(() => localStorage.getItem('theme') || 'light')
 
-  // ── Auth listener ────────────────────────────────────────
+  useEffect(() => {
+    const root = window.document.documentElement
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme(t => t === 'light' ? 'dark' : 'light')
+  }
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
-      if (session) fetchUsuario(session.user.id)
+      if (session) fetchUsuario(session)
       else setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      if (session) fetchUsuario(session.user.id)
-      else { setUsuario(null); setCart([]); setLoading(false) }
+      if (session) fetchUsuario(session)
+      else { setUsuario(null); setCart([]); setPerfilIncompleto(false); setLoading(false) }
     })
 
     return () => subscription.unsubscribe()
   }, [])
 
-  // ── Fetch perfil de usuario ───────────────────────────────
-  async function fetchUsuario(uid) {
-    const { data, error } = await supabase
+  async function fetchUsuario(session) {
+    const uid = session.user.id
+    const { data } = await supabase
       .from('usuarios')
       .select('*')
       .eq('id', uid)
       .single()
 
-    if (!error) setUsuario(data)
+    if (data) {
+      setUsuario(data)
+      // Perfil incompleto si le falta numero_control o edad
+      const incompleto = !data.numero_control || data.numero_control === '' || data.edad === null || data.edad === undefined
+      setPerfilIncompleto(incompleto)
+      if (!incompleto) await fetchCart(uid)
+    } else {
+      // Usuario sin perfil (Google nuevo) — crear perfil mínimo automáticamente
+      const meta = session.user.user_metadata || {}
+      const { data: newUser } = await supabase
+        .from('usuarios')
+        .insert({
+          id:           uid,
+          email:        session.user.email,
+          nombre:       meta.full_name || meta.name || session.user.email,
+          tipo_usuario: 'comprador',
+          // numero_control y edad vacíos → perfilIncompleto = true
+        })
+        .select()
+        .single()
+
+      if (newUser) {
+        setUsuario(newUser)
+        setPerfilIncompleto(true)
+      }
+    }
     setLoading(false)
   }
 
-  // ── Cart helpers ─────────────────────────────────────────
-  function addToCart(product) {
-    setCart(prev => {
-      const exists = prev.find(i => i.product.id === product.id)
-      if (exists) {
-        return prev.map(i =>
-          i.product.id === product.id
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
-        )
-      }
-      return [...prev, { product, quantity: 1 }]
-    })
+  async function fetchCart(uid) {
+    const { data } = await supabase
+      .from('cart')
+      .select('*, products(*)')
+      .eq('user_id', uid)
+
+    if (data) {
+      setCart(data.map(item => ({
+        cartItemId: item.id,
+        product:    item.products,
+        quantity:   item.quantity,
+      })))
+    }
   }
 
-  function removeFromCart(productId) {
+  async function addToCart(product) {
+    if (!session || !usuario || perfilIncompleto) return
+
+    const existing = cart.find(i => i.product.id === product.id)
+
+    if (existing) {
+      const newQty = existing.quantity + 1
+      await supabase.from('cart').update({ quantity: newQty }).eq('id', existing.cartItemId)
+      setCart(prev => prev.map(i =>
+        i.product.id === product.id ? { ...i, quantity: newQty } : i
+      ))
+    } else {
+      const { data, error } = await supabase
+        .from('cart')
+        .insert({ user_id: session.user.id, product_id: product.id, quantity: 1 })
+        .select('*, products(*)')
+        .single()
+
+      if (!error && data) {
+        setCart(prev => [...prev, {
+          cartItemId: data.id,
+          product:    data.products,
+          quantity:   data.quantity,
+        }])
+      }
+    }
+  }
+
+  async function removeFromCart(productId) {
+    const item = cart.find(i => i.product.id === productId)
+    if (!item) return
+    await supabase.from('cart').delete().eq('id', item.cartItemId)
     setCart(prev => prev.filter(i => i.product.id !== productId))
   }
 
-  function updateQuantity(productId, quantity) {
+  async function updateQuantity(productId, quantity) {
     if (quantity <= 0) { removeFromCart(productId); return }
-    setCart(prev =>
-      prev.map(i => i.product.id === productId ? { ...i, quantity } : i)
-    )
+    const item = cart.find(i => i.product.id === productId)
+    if (!item) return
+    await supabase.from('cart').update({ quantity }).eq('id', item.cartItemId)
+    setCart(prev => prev.map(i =>
+      i.product.id === productId ? { ...i, quantity } : i
+    ))
   }
 
-  function clearCart() { setCart([]) }
+  async function clearCart() {
+    if (!session) return
+    await supabase.from('cart').delete().eq('user_id', session.user.id)
+    setCart([])
+  }
 
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0)
-  const cartTotal = cart.reduce((sum, i) => sum + i.product.price * i.quantity, 0)
+  const cartTotal = cart.reduce((sum, i) => sum + (i.product?.price || 0) * i.quantity, 0)
 
   return (
     <AppContext.Provider value={{
       session, usuario, setUsuario,
-      loading,
+      loading, perfilIncompleto, setPerfilIncompleto,
       cart, cartCount, cartTotal,
       addToCart, removeFromCart, updateQuantity, clearCart,
-      fetchUsuario,
+      fetchUsuario, fetchCart,
+      theme, toggleTheme,
     }}>
       {children}
     </AppContext.Provider>
