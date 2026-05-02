@@ -10,6 +10,7 @@ export function AppProvider({ children }) {
   const [loading, setLoading]           = useState(true)
   const [perfilIncompleto, setPerfilIncompleto] = useState(false)
   const [theme, setTheme]               = useState(() => localStorage.getItem('theme') || 'light')
+  const [hideBottomNav, setHideBottomNav] = useState(false)
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -152,6 +153,7 @@ export function AppProvider({ children }) {
       addToCart, removeFromCart, updateQuantity, clearCart,
       fetchUsuario, fetchCart,
       theme, toggleTheme,
+      hideBottomNav, setHideBottomNav,
     }}>
       {children}
     </AppContext.Provider>

@@ -3,8 +3,10 @@ import { useApp } from '../context/AppContext'
 import { Home, Search, ShoppingCart, Receipt, User } from 'lucide-react'
 
 export default function BottomNav() {
-  const { cartCount, usuario } = useApp()
+  const { cartCount, usuario, hideBottomNav } = useApp()
   const { pathname } = useLocation()
+
+  if (hideBottomNav) return null;
 
   const tabs = [
     { to: '/',            icon: <Home className="w-5 h-5" />, label: 'Inicio'    },
@@ -15,7 +17,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <div id="bottom-nav-bar" className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-black border-t border-gray-100 dark:border-white/10 h-16 transition-colors">
+    <div id="bottom-nav-bar" className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-black border-t border-gray-100 dark:border-white/10 h-16 transition-all duration-300">
       <nav className="max-w-3xl mx-auto h-full px-2 sm:px-6">
         <div className="flex items-center justify-between h-full">
           {tabs.map(tab => {

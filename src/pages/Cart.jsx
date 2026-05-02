@@ -10,29 +10,28 @@ import { ShoppingCart, CheckCircle, Package, ArrowRight, MapPin, Clock } from 'l
 const COMMISSION = 0.06
 
 export default function Cart() {
-  const { cart, cartTotal, updateQuantity, removeFromCart, clearCart, session } = useApp()
+  const { cart, removeFromCart, updateQuantity, clearCart, cartTotal, setHideBottomNav, session } = useApp()
   const [showCheckout, setShowCheckout] = useState(false)
   const [showDeliveryConfirm, setShowDeliveryConfirm] = useState(false)
   const [success, setSuccess]           = useState(false)
   const [orders, setOrders]             = useState([])
 
   useEffect(() => {
-    const nav = document.getElementById('bottom-nav-bar');
     if (showDeliveryConfirm || showCheckout) {
+      setHideBottomNav(true);
       document.body.style.overflow = 'hidden';
       document.body.style.height = '100vh';
-      if (nav) nav.style.display = 'none';
     } else {
+      setHideBottomNav(false);
       document.body.style.overflow = '';
       document.body.style.height = '';
-      if (nav) nav.style.display = '';
     }
     return () => {
+      setHideBottomNav(false);
       document.body.style.overflow = '';
       document.body.style.height = '';
-      if (nav) nav.style.display = '';
     }
-  }, [showDeliveryConfirm, showCheckout])
+  }, [showDeliveryConfirm, showCheckout, setHideBottomNav])
 
   async function handlePaymentSuccess() {
     const newOrders = []
@@ -236,6 +235,7 @@ export default function Cart() {
             
             {/* Header (Fixed) */}
             <div className="relative flex-none px-6 pt-8 pb-4 bg-white dark:bg-[#050505] border-b border-gray-100 dark:border-white/5">
+              <div className="absolute top-2 left-6 bg-black/5 dark:bg-white/10 text-[7px] px-1.5 py-0.5 rounded font-black opacity-50 uppercase tracking-widest">v0.2.2 Live</div>
               <h2 className="text-2xl font-black text-gray-900 dark:text-white pr-10">Acuerdo de Entrega</h2>
               <button 
                 onClick={() => setShowDeliveryConfirm(false)} 
