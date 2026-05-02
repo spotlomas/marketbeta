@@ -208,10 +208,10 @@ export default function Cart() {
       )}
 
       {showDeliveryConfirm && (
-        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-[70] overflow-y-auto" onClick={() => setShowDeliveryConfirm(false)}>
-          <div className="min-h-full flex items-end sm:items-center justify-center p-4 pb-32 sm:p-8">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[9999] overflow-y-auto px-4 py-12" onClick={() => setShowDeliveryConfirm(false)}>
+          <div className="min-h-full flex items-center justify-center pb-48">
             <div 
-              className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full max-w-lg rounded-[2.5rem] flex flex-col shadow-xl overflow-hidden animate-in slide-in-from-bottom duration-300"
+              className="bg-white dark:bg-[#080808] border border-gray-200 dark:border-white/10 w-full max-w-lg rounded-[3rem] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
               onClick={e => e.stopPropagation()}
             >
             <div className="p-6 sm:p-8 overflow-y-auto">
@@ -235,7 +235,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 pb-2">
+              <div className="flex flex-col gap-3 pb-16">
                 <button onClick={() => {
                   setShowDeliveryConfirm(false)
                   setShowCheckout(true)

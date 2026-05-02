@@ -140,10 +140,10 @@ function ProductModal({ product, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-md overflow-y-auto scroll-smooth" onClick={onClose}>
-      <div className="min-h-full flex items-end sm:items-center justify-center p-4 pb-32 sm:p-8" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-xl overflow-y-auto scroll-smooth py-12 px-4" onClick={onClose}>
+      <div className="min-h-full flex items-center justify-center pb-48" onClick={e => e.stopPropagation()}>
         <div 
-          className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-300"
+          className="bg-white dark:bg-[#080808] border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-[3rem] overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300"
         >
           {/* Header Image */}
           <div className="relative">
@@ -161,7 +161,7 @@ function ProductModal({ product, onClose }) {
           </div>
 
           {/* Content Area */}
-          <div className="px-8 pb-10 -mt-10 relative z-10">
+          <div className="px-8 pb-24 -mt-10 relative z-10">
             <div className="flex justify-between items-start gap-4 mb-4">
               <div>
                 <h2 className="text-xl font-black text-gray-900 dark:text-white leading-tight tracking-tight uppercase">{product.name}</h2>
@@ -223,7 +223,7 @@ function ProductModal({ product, onClose }) {
             {quantity > 0 && (
               <div className="mt-8 pt-8 border-t border-gray-100 dark:border-white/5 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <button onClick={onClose}
-                  className="w-full bg-green-600 dark:bg-[#CCFF00] hover:brightness-110 text-white dark:text-black font-black text-sm py-5 rounded-[2rem] shadow-[0_20px_50px_rgba(204,255,0,0.3)] dark:shadow-[0_20px_50px_rgba(204,255,0,0.15)] active:scale-[0.98] transition-all flex items-center justify-between px-10 group">
+                  className="w-full bg-green-600 dark:bg-[#CCFF00] hover:brightness-110 text-white dark:text-black font-black text-sm py-5 rounded-[2rem] shadow-[0_20px_50px_rgba(204,255,0,0.3)] dark:shadow-[0_20px_50px_rgba(204,255,0,0.15)] active:scale-[0.98] transition-all flex items-center justify-between px-10 group mb-10">
                   <span className="uppercase tracking-widest text-base">Listo</span>
                   <div className="flex items-center gap-3">
                     <span className="text-xs opacity-60 font-bold uppercase tracking-widest">{quantity} Producto(s)</span>
