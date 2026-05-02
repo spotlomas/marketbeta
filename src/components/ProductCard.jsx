@@ -123,6 +123,16 @@ function ProductModal({ product, onClose }) {
       setLoadingRelated(false)
     }
     fetchRelated()
+
+    // Hide bottom nav and disable body scroll
+    const nav = document.getElementById('bottom-nav-bar');
+    if (nav) nav.style.display = 'none';
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      if (nav) nav.style.display = '';
+      document.body.style.overflow = '';
+    }
   }, [product.id, product.seller_id])
 
   function handleAdd() {
@@ -140,11 +150,12 @@ function ProductModal({ product, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-xl overflow-y-auto scroll-smooth py-12 px-4" onClick={onClose}>
-      <div className="min-h-full flex items-center justify-center pb-48" onClick={e => e.stopPropagation()}>
-        <div 
-          className="bg-white dark:bg-[#080808] border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-[3rem] overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300"
-        >
+    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-xl flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
+      <div 
+        className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-md rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 max-h-[95vh] sm:max-h-[90vh] overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex-1 overflow-y-auto scroll-smooth w-full relative">
           {/* Header Image */}
           <div className="relative">
             <div className="w-full h-64 sm:h-72 bg-gray-100 dark:bg-[#121212] relative">
@@ -161,7 +172,7 @@ function ProductModal({ product, onClose }) {
           </div>
 
           {/* Content Area */}
-          <div className="px-8 pb-24 -mt-10 relative z-10">
+          <div className="px-6 sm:px-8 pb-8 -mt-8 relative z-10">
             <div className="flex justify-between items-start gap-4 mb-4">
               <div>
                 <h2 className="text-xl font-black text-gray-900 dark:text-white leading-tight tracking-tight uppercase">{product.name}</h2>
@@ -193,13 +204,13 @@ function ProductModal({ product, onClose }) {
               <h3 className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-[0.2em] mb-6">Más de este vendedor</h3>
               
               {loadingRelated ? (
-                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                <div className="flex flex-row gap-4 overflow-x-auto pb-4 scrollbar-hide">
                   {[1, 2].map(i => (
                     <div key={i} className="w-32 h-44 bg-gray-100 dark:bg-white/5 rounded-[2rem] flex-shrink-0 animate-pulse"></div>
                   ))}
                 </div>
               ) : related.length > 0 ? (
-                <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide -mx-8 px-8 snap-x">
+                <div className="flex flex-row gap-4 overflow-x-auto pb-6 scrollbar-hide -mx-6 sm:-mx-8 px-6 sm:px-8 snap-x">
                   {related.map(rel => (
                     <div key={rel.id} className="snap-center flex-shrink-0">
                       <div className="w-32 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group pb-4 active:scale-95 transition-transform cursor-pointer">

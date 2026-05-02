@@ -15,7 +15,7 @@ export default function BottomNav() {
   ]
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-black border-t border-gray-100 dark:border-white/10 h-16 transition-colors">
+    <div id="bottom-nav-bar" className="fixed bottom-0 left-0 right-0 z-50 safe-bottom bg-white dark:bg-black border-t border-gray-100 dark:border-white/10 h-16 transition-colors">
       <nav className="max-w-3xl mx-auto h-full px-2 sm:px-6">
         <div className="flex items-center justify-between h-full">
           {tabs.map(tab => {

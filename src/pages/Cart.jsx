@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useApp } from '../context/AppContext'
@@ -15,6 +15,21 @@ export default function Cart() {
   const [showDeliveryConfirm, setShowDeliveryConfirm] = useState(false)
   const [success, setSuccess]           = useState(false)
   const [orders, setOrders]             = useState([])
+
+  useEffect(() => {
+    const nav = document.getElementById('bottom-nav-bar');
+    if (showDeliveryConfirm || showCheckout) {
+      if (nav) nav.style.display = 'none';
+      document.body.style.overflow = 'hidden';
+    } else {
+      if (nav) nav.style.display = '';
+      document.body.style.overflow = '';
+    }
+    return () => {
+      if (nav) nav.style.display = '';
+      document.body.style.overflow = '';
+    }
+  }, [showDeliveryConfirm, showCheckout])
 
   async function handlePaymentSuccess() {
     const newOrders = []
@@ -208,13 +223,12 @@ export default function Cart() {
       )}
 
       {showDeliveryConfirm && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[9999] overflow-y-auto px-4 py-12" onClick={() => setShowDeliveryConfirm(false)}>
-          <div className="min-h-full flex items-center justify-center pb-48">
-            <div 
-              className="bg-white dark:bg-[#080808] border border-gray-200 dark:border-white/10 w-full max-w-lg rounded-[3rem] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
-              onClick={e => e.stopPropagation()}
-            >
-            <div className="p-6 sm:p-8 overflow-y-auto">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setShowDeliveryConfirm(false)}>
+          <div 
+            className="bg-white dark:bg-[#080808] border-t sm:border border-gray-200 dark:border-white/10 w-full sm:max-w-lg rounded-t-[2.5rem] sm:rounded-[3rem] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 max-h-[95vh] sm:max-h-[90vh]"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="p-6 sm:p-8 overflow-y-auto scroll-smooth flex-1 relative w-full">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Acuerdo de Entrega</h2>
               <p className="text-sm text-gray-500 mb-6">Por favor, revisa y acepta los términos de entrega del vendedor dentro del entorno universitario.</p>
               
@@ -235,7 +249,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 pb-16">
+              <div className="flex flex-col gap-3 pb-8">
                 <button onClick={() => {
                   setShowDeliveryConfirm(false)
                   setShowCheckout(true)
@@ -249,8 +263,7 @@ export default function Cart() {
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   )
 }
