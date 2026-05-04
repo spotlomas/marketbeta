@@ -150,6 +150,9 @@ function ProductModal({ product, onClose }) {
   }, [product.id, product.seller_id, setHideBottomNav])
 
   function handleAdd() {
+    // Verificar stock si no es ilimitado
+    if (!product.stock_ilimitado && quantity >= product.stock) return;
+    
     if (quantity === 0) {
       addToCart(product)
     } else {
@@ -209,8 +212,11 @@ function ProductModal({ product, onClose }) {
               <span className="text-3xl font-black text-green-600 dark:text-[#CCFF00]">{quantity}</span>
               <span className="text-[10px] uppercase tracking-widest font-bold opacity-40">Cantidad</span>
             </div>
-            <button onClick={handleAdd}
-              className="w-14 h-14 rounded-full bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black flex items-center justify-center text-3xl shadow-xl active:scale-95 hover:brightness-110 transition-all">
+            <button 
+              onClick={handleAdd}
+              disabled={!product.stock_ilimitado && quantity >= product.stock}
+              className={`w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl transition-all ${(!product.stock_ilimitado && quantity >= product.stock) ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed opacity-50' : 'bg-green-600 dark:bg-[#CCFF00] text-white dark:text-black active:scale-95 hover:brightness-110'}`}
+            >
               +
             </button>
           </div>
@@ -260,7 +266,8 @@ function ProductModal({ product, onClose }) {
                                 <span className="px-2 text-[11px] font-black text-black min-w-[1.2rem] text-center">{relQty}</span>
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); updateQuantity(rel.id, relQty + 1); }}
-                                  className="w-6 h-6 rounded-full flex items-center justify-center text-black hover:bg-black/10 active:scale-90 transition-all font-bold"
+                                  disabled={!rel.stock_ilimitado && relQty >= rel.stock}
+                                  className={`w-6 h-6 rounded-full flex items-center justify-center font-bold transition-all ${(!rel.stock_ilimitado && relQty >= rel.stock) ? 'text-gray-400 cursor-not-allowed' : 'text-black hover:bg-black/10 active:scale-90'}`}
                                 >
                                   +
                                 </button>
