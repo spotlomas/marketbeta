@@ -227,7 +227,9 @@ function ProductModal({ product, onClose }) {
             ) : related.length > 0 ? (
               <div className="flex flex-row gap-4 overflow-x-auto pb-6 scrollbar-hide -mx-6 sm:-mx-8 px-6 sm:px-8 snap-x">
                 {related.map(rel => {
-                  const isItemInCart = cart.some(i => i?.product?.id === rel.id)
+                  const itemInCart = cart.find(i => i?.product?.id === rel.id)
+                  const relQty = itemInCart ? itemInCart.quantity : 0
+
                   return (
                     <div key={rel.id} className="snap-center flex-shrink-0">
                       <div className="w-32 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group pb-4 relative">
@@ -237,16 +239,34 @@ function ProductModal({ product, onClose }) {
                           ) : (
                             <div className="w-full h-full flex items-center justify-center opacity-20 text-2xl">🍔</div>
                           )}
-                          {/* Botón de Agregar Rápido */}
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              addToCart(rel);
-                            }}
-                            className={`absolute bottom-2 right-2 w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all active:scale-90 ${isItemInCart ? 'bg-green-500 text-white' : 'bg-white dark:bg-[#CCFF00] text-black hover:scale-110'}`}
-                          >
-                            {isItemInCart ? '✓' : '+'}
-                          </button>
+                          
+                          {/* Controlador de Cantidad Compacto */}
+                          <div className="absolute bottom-2 right-2 flex items-center">
+                            {relQty === 0 ? (
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); addToCart(rel); }}
+                                className="w-8 h-8 rounded-full bg-white dark:bg-[#CCFF00] text-black flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all font-bold text-lg"
+                              >
+                                +
+                              </button>
+                            ) : (
+                              <div className="bg-white dark:bg-[#CCFF00] rounded-full flex items-center p-1 shadow-lg border border-black/5 animate-in zoom-in duration-200">
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); updateQuantity(rel.id, relQty - 1); }}
+                                  className="w-6 h-6 rounded-full flex items-center justify-center text-black hover:bg-black/10 active:scale-90 transition-all font-bold"
+                                >
+                                  −
+                                </button>
+                                <span className="px-2 text-[11px] font-black text-black min-w-[1.2rem] text-center">{relQty}</span>
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); updateQuantity(rel.id, relQty + 1); }}
+                                  className="w-6 h-6 rounded-full flex items-center justify-center text-black hover:bg-black/10 active:scale-90 transition-all font-bold"
+                                >
+                                  +
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
                         <div className="px-3 pt-4 text-center">
                           <p className="text-[11px] font-bold text-gray-900 dark:text-white truncate uppercase tracking-tight">{rel.name}</p>
