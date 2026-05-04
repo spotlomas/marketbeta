@@ -116,7 +116,7 @@ export default function ProductCard({ product, horizontal = false }) {
 }
 
 function ProductModal({ product, onClose }) {
-  const { addToCart, cart, updateQuantity } = useApp()
+  const { addToCart, cart, updateQuantity, setHideBottomNav } = useApp()
   const [related, setRelated] = useState([])
   const [loadingRelated, setLoadingRelated] = useState(true)
 
