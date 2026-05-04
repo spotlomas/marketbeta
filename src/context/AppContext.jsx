@@ -94,16 +94,18 @@ export function AppProvider({ children }) {
   async function addToCart(product) {
     if (!session || !usuario || perfilIncompleto) return
 
+    // Buscamos si ya existe localmente
     const existing = cart.find(i => i?.product?.id === product?.id)
 
     if (existing) {
-      const newQty = existing.quantity + 1
+      const newQty = (existing.quantity || 0) + 1
       const { error } = await supabase.from('cart').update({ quantity: newQty }).eq('id', existing.cartItemId)
-      if (error) alert("Error Supabase Update: " + error.message)
+      if (error) console.error("Error updating cart:", error)
       setCart(prev => prev.map(i =>
         i?.product?.id === product?.id ? { ...i, quantity: newQty } : i
       ))
     } else {
+      // Intentamos insertar. Si falla por "duplicate key", significa que hubo un desfase y ya existía en DB.
       const { data, error } = await supabase
         .from('cart')
         .insert({ user_id: session.user.id, product_id: product.id, quantity: 1 })
@@ -111,16 +113,24 @@ export function AppProvider({ children }) {
         .single()
 
       if (error) {
-        alert("Error Supabase: " + error.message)
-        console.error("Cart Insert Error:", error)
+        if (error.code === '23505') { // Código de Postgres para Duplicate Key
+          // Si ya existía en DB pero no en nuestro estado local, simplemente refrescamos el carrito
+          await fetchCart(session.user.id)
+        } else {
+          console.error("Cart Insert Error:", error)
+        }
       }
 
       if (!error && data) {
-        setCart(prev => [...prev, {
-          cartItemId: data.id,
-          product:    data.products,
-          quantity:   data.quantity,
-        }])
+        setCart(prev => {
+          // Doble verificación para evitar duplicados en el estado de React
+          if (prev.some(i => i?.product?.id === data.product_id)) return prev
+          return [...prev, {
+            cartItemId: data.id,
+            product:    data.products,
+            quantity:   data.quantity,
+          }]
+        })
       }
     }
   }
