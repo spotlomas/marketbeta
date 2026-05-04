@@ -19,7 +19,7 @@ export default function TopNav() {
 
         {/* Logo */}
         <Link to="/" className="flex flex-col flex-shrink-0 group">
-          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-inter font-medium uppercase tracking-wide">MarketBeta v0.2.2</span>
+          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-inter font-medium uppercase tracking-wide">MarketBeta v0.2.4</span>
           <span className="text-sm font-inter font-bold text-gray-900 dark:text-white flex items-center gap-1">
             Ubicación actual <ChevronDown className="w-3 h-3 text-green-500 dark:text-[#CCFF00] mt-0.5" />
           </span>
