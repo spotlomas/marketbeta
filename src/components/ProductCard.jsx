@@ -27,10 +27,12 @@ export default function ProductCard({ product, horizontal = false }) {
     e.preventDefault()
     e.stopPropagation()
     if (!session) {
+      alert("Por favor inicia sesión para agregar productos al carrito.")
       navigate('/login')
       return
     }
     if (perfilIncompleto) {
+      alert("¡Hola! Para poder comprar, primero necesitamos que completes tu perfil (Número de control y Edad). Te llevaremos ahí ahora mismo.")
       navigate('/perfil')
       return
     }
