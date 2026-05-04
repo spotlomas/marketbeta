@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabaseClient'
 import { useApp } from '../context/AppContext'
@@ -18,13 +19,17 @@ function Stars({ rating }) {
 }
 
 export default function ProductCard({ product, horizontal = false }) {
-  const { addToCart, updateQuantity, cart, perfilIncompleto, setHideBottomNav } = useApp()
+  const { addToCart, updateQuantity, cart, perfilIncompleto, setHideBottomNav, session } = useApp()
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
 
   function handleAgregar(e) {
     e.preventDefault()
     e.stopPropagation()
+    if (!session) {
+      navigate('/login')
+      return
+    }
     if (perfilIncompleto) {
       navigate('/perfil')
       return
@@ -150,12 +155,12 @@ function ProductModal({ product, onClose }) {
     }
   }
 
-  return (
-    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center animate-in fade-in duration-200" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center animate-in fade-in duration-200" onClick={onClose}>
       
       {/* Modal Container */}
       <div 
-        className="bg-white dark:bg-[#050505] w-full sm:max-w-md h-[90vh] rounded-t-[2.5rem] sm:rounded-[2.5rem] flex flex-col shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom duration-300"
+        className="bg-white dark:bg-[#050505] w-full sm:max-w-md h-[95vh] rounded-t-[2.5rem] sm:rounded-[2.5rem] flex flex-col shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom duration-300"
         onClick={e => e.stopPropagation()}
       >
         
@@ -234,20 +239,23 @@ function ProductModal({ product, onClose }) {
         </div>
 
         {/* Fixed Sticky Action Button */}
-        {quantity > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/10 z-20 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.05)] text-center safe-bottom flex items-center justify-center">
-            <button onClick={onClose}
-              className="w-full max-w-sm bg-green-600 dark:bg-[#CCFF00] hover:brightness-110 text-white dark:text-black font-black text-sm py-4 rounded-[2rem] shadow-lg active:scale-[0.98] transition-all flex items-center justify-between px-8 group">
-              <span className="uppercase tracking-widest text-base">Listo</span>
-              <div className="flex items-center gap-3">
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/10 z-50 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.05)] text-center safe-bottom flex items-center justify-center">
+          <button onClick={() => { quantity === 0 ? handleAdd() : onClose() }}
+            className="w-full max-w-sm bg-green-600 dark:bg-[#CCFF00] hover:brightness-110 text-white dark:text-black font-black text-sm py-4 rounded-[2rem] shadow-lg active:scale-[0.98] transition-all flex items-center justify-between px-8 group">
+            <span className="uppercase tracking-widest text-base">
+              {quantity === 0 ? 'Agregar' : 'Listo'}
+            </span>
+            <div className="flex items-center gap-3">
+              {quantity > 0 && (
                 <span className="text-xs opacity-60 font-bold uppercase tracking-widest">{quantity} Producto(s)</span>
-                <span className="text-xl group-hover:translate-x-2 transition-transform">→</span>
-              </div>
-            </button>
-          </div>
-        )}
+              )}
+              <span className="text-xl group-hover:translate-x-2 transition-transform">→</span>
+            </div>
+          </button>
+        </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
