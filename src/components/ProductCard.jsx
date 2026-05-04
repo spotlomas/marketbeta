@@ -44,7 +44,10 @@ export default function ProductCard({ product, horizontal = false }) {
   if (horizontal) {
     return (
       <>
-        <div className="flex-shrink-0 w-40 bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group transition-all hover:border-green-400 dark:hover:border-[#CCFF00]/30 hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(204,255,0,0.05)] pb-3 relative">
+        <div 
+          onClick={() => setShowModal(true)}
+          className="flex-shrink-0 w-40 bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group transition-all hover:border-green-400 dark:hover:border-[#CCFF00]/30 hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(204,255,0,0.05)] pb-3 relative cursor-pointer"
+        >
           <div className="aspect-square bg-gray-100 dark:bg-[#121212] overflow-hidden flex-shrink-0 relative border-b border-gray-200 dark:border-white/5 z-10">
             {product.image_url
               ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -73,7 +76,10 @@ export default function ProductCard({ product, horizontal = false }) {
 
   return (
     <>
-      <div className="bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col h-full group transition-all hover:border-green-400 dark:hover:border-[#CCFF00]/30 hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(204,255,0,0.05)] pb-4 relative">
+      <div 
+        onClick={() => setShowModal(true)}
+        className="bg-gray-50 dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col h-full group transition-all hover:border-green-400 dark:hover:border-[#CCFF00]/30 hover:shadow-lg dark:hover:shadow-[0_0_20px_rgba(204,255,0,0.05)] pb-4 relative cursor-pointer"
+      >
         <div className="aspect-square bg-gray-100 dark:bg-[#121212] overflow-hidden flex-shrink-0 relative border-b border-gray-200 dark:border-white/5 z-10">
           {product.image_url
             ? <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
