@@ -158,11 +158,11 @@ function ProductModal({ product, onClose }) {
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center animate-in fade-in duration-200" onClick={onClose}>
+    <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center transition-opacity" onClick={onClose}>
       
       {/* Modal Container */}
       <div 
-        className="bg-white dark:bg-[#050505] w-full sm:max-w-md h-[95vh] rounded-t-[2.5rem] sm:rounded-[2.5rem] flex flex-col shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom duration-300"
+        className="bg-white dark:bg-[#0a0a0a] w-full sm:max-w-md h-[92vh] sm:h-auto sm:max-h-[90vh] rounded-t-[2.5rem] sm:rounded-[2.5rem] flex flex-col shadow-2xl relative overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         
