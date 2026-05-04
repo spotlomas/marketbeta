@@ -120,7 +120,8 @@ export default function Perfil() {
       setSuccess(incompleto ? 'Guardado correctamente.' : 'Perfil completado. ¡Bienvenido!')
       setTimeout(() => setSuccess(''), 4000)
     } else {
-      setError('Error al guardar. Por favor, intenta de nuevo.')
+      console.error("DB Error:", dbError)
+      setError(`Error de base de datos: ${dbError?.message || dbError?.code || 'Desconocido'}`)
     }
     setSaving(false)
   }
