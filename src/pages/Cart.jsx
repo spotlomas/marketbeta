@@ -168,8 +168,13 @@ export default function Cart() {
                       <button onClick={() => updateQuantity(product.id, quantity - 1)}
                         className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-[#050505] text-gray-700 dark:text-white hover:text-green-600 dark:hover:text-[#CCFF00] border border-gray-200 dark:border-white/10 text-lg font-medium transition-colors">−</button>
                       <span className="font-bold text-sm w-5 text-center">{quantity}</span>
-                      <button onClick={() => updateQuantity(product.id, quantity + 1)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-[#050505] text-gray-700 dark:text-white hover:text-green-600 dark:hover:text-[#CCFF00] border border-gray-200 dark:border-white/10 text-lg font-medium transition-colors">+</button>
+                      <button 
+                        onClick={() => updateQuantity(product.id, quantity + 1)}
+                        disabled={!product.stock_ilimitado && quantity >= product.stock}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full border border-gray-200 dark:border-white/10 text-lg font-medium transition-colors ${(!product.stock_ilimitado && quantity >= product.stock) ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-[#050505] text-gray-700 dark:text-white hover:text-green-600 dark:hover:text-[#CCFF00]'}`}
+                      >
+                        +
+                      </button>
                     </div>
                     <button onClick={() => removeFromCart(product.id)}
                       className="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 p-2 rounded-full transition-colors flex items-center justify-center">

@@ -146,6 +146,9 @@ export function AppProvider({ children }) {
     if (quantity <= 0) { removeFromCart(productId); return }
     const item = cart.find(i => i?.product?.id === productId)
     if (!item) return
+
+    // Seguridad extra: No permitir subir más allá del stock
+    if (!item.product?.stock_ilimitado && quantity > (item.product?.stock || 0)) return
     const { error } = await supabase.from('cart').update({ quantity }).eq('id', item.cartItemId)
     if (error) alert("Error Supabase UpdateQty: " + error.message)
     setCart(prev => prev.map(i =>
