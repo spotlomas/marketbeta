@@ -226,19 +226,36 @@ function ProductModal({ product, onClose }) {
               </div>
             ) : related.length > 0 ? (
               <div className="flex flex-row gap-4 overflow-x-auto pb-6 scrollbar-hide -mx-6 sm:-mx-8 px-6 sm:px-8 snap-x">
-                {related.map(rel => (
-                  <div key={rel.id} className="snap-center flex-shrink-0">
-                    <div className="w-32 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group pb-4 active:scale-95 transition-transform cursor-pointer">
-                      <div className="aspect-square bg-gray-200 dark:bg-[#121212] relative">
-                         {rel.image_url ? <img src={rel.image_url} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center opacity-20 text-2xl">🍔</div>}
-                      </div>
-                      <div className="px-3 pt-4 text-center">
-                        <p className="text-[11px] font-bold text-gray-900 dark:text-white truncate uppercase tracking-tight">{rel.name}</p>
-                        <p className="text-[11px] text-green-600 dark:text-[#CCFF00] font-black mt-1">${Number(rel.price).toFixed(2)}</p>
+                {related.map(rel => {
+                  const isItemInCart = cart.some(i => i?.product?.id === rel.id)
+                  return (
+                    <div key={rel.id} className="snap-center flex-shrink-0">
+                      <div className="w-32 bg-gray-50 dark:bg-white/5 rounded-[2rem] border border-gray-200 dark:border-white/5 overflow-hidden flex flex-col group pb-4 relative">
+                        <div className="aspect-square bg-gray-200 dark:bg-[#121212] relative overflow-hidden">
+                          {rel.image_url ? (
+                            <img src={rel.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center opacity-20 text-2xl">🍔</div>
+                          )}
+                          {/* Botón de Agregar Rápido */}
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart(rel);
+                            }}
+                            className={`absolute bottom-2 right-2 w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all active:scale-90 ${isItemInCart ? 'bg-green-500 text-white' : 'bg-white dark:bg-[#CCFF00] text-black hover:scale-110'}`}
+                          >
+                            {isItemInCart ? '✓' : '+'}
+                          </button>
+                        </div>
+                        <div className="px-3 pt-4 text-center">
+                          <p className="text-[11px] font-bold text-gray-900 dark:text-white truncate uppercase tracking-tight">{rel.name}</p>
+                          <p className="text-[11px] text-green-600 dark:text-[#CCFF00] font-black mt-1">${Number(rel.price).toFixed(2)}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             ) : (
               <p className="text-xs text-gray-400 dark:text-gray-500 pb-4">No hay más productos disponibles.</p>
