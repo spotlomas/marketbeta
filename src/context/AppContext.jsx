@@ -94,14 +94,14 @@ export function AppProvider({ children }) {
   async function addToCart(product) {
     if (!session || !usuario || perfilIncompleto) return
 
-    const existing = cart.find(i => i.product.id === product.id)
+    const existing = cart.find(i => i?.product?.id === product?.id)
 
     if (existing) {
       const newQty = existing.quantity + 1
       const { error } = await supabase.from('cart').update({ quantity: newQty }).eq('id', existing.cartItemId)
       if (error) alert("Error Supabase Update: " + error.message)
       setCart(prev => prev.map(i =>
-        i.product.id === product.id ? { ...i, quantity: newQty } : i
+        i?.product?.id === product?.id ? { ...i, quantity: newQty } : i
       ))
     } else {
       const { data, error } = await supabase
@@ -126,20 +126,20 @@ export function AppProvider({ children }) {
   }
 
   async function removeFromCart(productId) {
-    const item = cart.find(i => i.product.id === productId)
+    const item = cart.find(i => i?.product?.id === productId)
     if (!item) return
     await supabase.from('cart').delete().eq('id', item.cartItemId)
-    setCart(prev => prev.filter(i => i.product.id !== productId))
+    setCart(prev => prev.filter(i => i?.product?.id !== productId))
   }
 
   async function updateQuantity(productId, quantity) {
     if (quantity <= 0) { removeFromCart(productId); return }
-    const item = cart.find(i => i.product.id === productId)
+    const item = cart.find(i => i?.product?.id === productId)
     if (!item) return
     const { error } = await supabase.from('cart').update({ quantity }).eq('id', item.cartItemId)
     if (error) alert("Error Supabase UpdateQty: " + error.message)
     setCart(prev => prev.map(i =>
-      i.product.id === productId ? { ...i, quantity } : i
+      i?.product?.id === productId ? { ...i, quantity } : i
     ))
   }
 

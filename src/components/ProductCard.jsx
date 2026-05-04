@@ -120,7 +120,7 @@ function ProductModal({ product, onClose }) {
   const [related, setRelated] = useState([])
   const [loadingRelated, setLoadingRelated] = useState(true)
 
-  const cartItem = cart.find(i => i.product.id === product.id)
+  const cartItem = cart.find(i => i?.product?.id === product?.id)
   const quantity = cartItem ? cartItem.quantity : 0
 
   useEffect(() => {
@@ -153,13 +153,13 @@ function ProductModal({ product, onClose }) {
     if (quantity === 0) {
       addToCart(product)
     } else {
-      updateQuantity(product.id, quantity + 1)
+      updateQuantity(product?.id, quantity + 1)
     }
   }
 
   function handleRemove() {
     if (quantity > 0) {
-      updateQuantity(product.id, quantity - 1)
+      updateQuantity(product?.id, quantity - 1)
     }
   }
 
