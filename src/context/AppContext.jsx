@@ -98,7 +98,8 @@ export function AppProvider({ children }) {
 
     if (existing) {
       const newQty = existing.quantity + 1
-      await supabase.from('cart').update({ quantity: newQty }).eq('id', existing.cartItemId)
+      const { error } = await supabase.from('cart').update({ quantity: newQty }).eq('id', existing.cartItemId)
+      if (error) alert("Error Supabase Update: " + error.message)
       setCart(prev => prev.map(i =>
         i.product.id === product.id ? { ...i, quantity: newQty } : i
       ))
@@ -108,6 +109,11 @@ export function AppProvider({ children }) {
         .insert({ user_id: session.user.id, product_id: product.id, quantity: 1 })
         .select('*, products(*)')
         .single()
+
+      if (error) {
+        alert("Error Supabase: " + error.message)
+        console.error("Cart Insert Error:", error)
+      }
 
       if (!error && data) {
         setCart(prev => [...prev, {
@@ -130,7 +136,8 @@ export function AppProvider({ children }) {
     if (quantity <= 0) { removeFromCart(productId); return }
     const item = cart.find(i => i.product.id === productId)
     if (!item) return
-    await supabase.from('cart').update({ quantity }).eq('id', item.cartItemId)
+    const { error } = await supabase.from('cart').update({ quantity }).eq('id', item.cartItemId)
+    if (error) alert("Error Supabase UpdateQty: " + error.message)
     setCart(prev => prev.map(i =>
       i.product.id === productId ? { ...i, quantity } : i
     ))
